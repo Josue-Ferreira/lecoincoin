@@ -1,0 +1,9 @@
+services:
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'mydb'
+      MYSQL_USER: 'josue'
+      MYSQL_PASSWORD: 'toto'
+      MYSQL_ROOT_PASSWORD: 'toto1234'
