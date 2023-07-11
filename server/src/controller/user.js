@@ -48,19 +48,19 @@ const deleteProfile = async(req, res) => {
     }
 }
 
-// const usersSeeder = (req, res) => {
-//     try{
-//         user.usersSeeder();
-//         res.sendStatus(200);
-//     }catch(e){
-//         console.error(e);
-//     }
-// }
+const usersSeeder = (req, res) => {
+    try{
+        user.usersSeeder();
+        res.sendStatus(200);
+    }catch(e){
+        console.error(e);
+    }
+}
 
 module.exports = {
     signin,
     signup,
     updateProfile,
-    deleteProfile
-    // usersSeeder
+    deleteProfile,
+    usersSeeder
 }

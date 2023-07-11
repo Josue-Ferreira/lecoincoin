@@ -14,10 +14,10 @@ const getAllProducts = async(req, res) => {
 }
 
 const getProduct = async(req, res) => {
-    const {id} = req.params;
+    const {productId} = req.params;
 
     try{
-        const productAlone = await product.get(id);
+        const productAlone = await product.get(productId);
         res.json({'product': productAlone});
     }catch(e){
         console.error(e);
@@ -37,10 +37,10 @@ const createProduct = async(req, res) => {
 
 const updateProduct = async(req, res) => {
     const {name, price, description} = req.body;
-    const {id} = req.params;
+    const {productId} = req.params;
 
     try{
-        const productAlone = await product.update(name, price, description, id);
+        const productAlone = await product.update(name, price, description, productId);
         res.json({'product': productAlone});
     }catch(e){
         console.error(e);
@@ -48,10 +48,65 @@ const updateProduct = async(req, res) => {
 }
 
 const deleteProduct = async(req, res) => {
-    const {id} = req.params;
+    const {productId} = req.params;
 
     try{
-        await product.delete(id);
+        await product.delete(productId);
+        res.sendStatus(200);
+    }catch(e){
+        console.error(e);
+    }
+}
+
+const productsSeeder = async(req, res) => {
+    try{
+        await product.seeder();
+        res.sendStatus(200);
+    }catch(e){
+        console.error(e);
+    }
+}
+
+const getAllComments = async(req, res) => {
+    const {productId} = req.params;
+
+    try{
+        const comments = await product.getAllComments(productId); 
+        res.json({'comments' : comments});
+    }catch(e){
+        console.error(e);
+    }
+}
+
+const createComment = async(req, res) => {
+    const {comment, user_id} = req.body;
+    const {productId} = req.params;
+
+    try{
+        await product.createComment(comment, user_id, productId);
+        res.sendStatus(200);
+    }catch(e){
+        console.error(e);
+    }
+}
+
+const updateComment = async(req, res) => {
+    const {commentId} = req.params;
+    const {comment} = req.body;
+
+    try{
+        await product.updateComment(comment, commentId);
+        res.sendStatus(200);
+    }catch(e){
+        console.error(e);
+    }
+}
+
+const deleteComment = async(req, res) => {
+    const {commentId} = req.params;
+
+    try{
+        await product.deleteComment(commentId);
         res.sendStatus(200);
     }catch(e){
         console.error(e);
@@ -63,5 +118,10 @@ module.exports = {
     getProduct,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    productsSeeder,
+    getAllComments,
+    createComment,
+    updateComment,
+    deleteComment
 }
