@@ -5,8 +5,8 @@ const userHandlers = require('../controller/user');
 
 router.post('/signin', userHandlers.signin);
 router.post('/signup', userHandlers.signup);
-router.put('/update', userHandlers.updateProfile);
-router.delete('/delete', userHandlers.deleteProfile);
-// router.get('/usersseeder',userHandlers.usersSeeder);
+router.put('/', userHandlers.updateProfile);
+router.delete('/', userHandlers.deleteProfile);
+router.get('/usersseeder',userHandlers.usersSeeder);
 
 module.exports = router;

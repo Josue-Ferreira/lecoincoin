@@ -1,22 +1,30 @@
+const cloudinary = require('cloudinary');
+cloudinary.config({ 
+    cloud_name: 'josueferreira', 
+    api_key: '877172724662548', 
+    api_secret: 'yWrfcVEPHDzBV4iDG9_iuFo51P0' 
+  });
+
 class Product{
     constructor(dbPoolPromise){
         this.db = dbPoolPromise;
     }
 
     async create(name, price, description, user_id){
-        await this.db.query(
+        const [results] = await this.db.query(
             'INSERT INTO product(name, price, description, user_id) VALUES (?,?,?,?)',
             [name, price, description, user_id]
         );
+        return results.insertId;
     }
 
     async get(id){
-        const [results] = await this.db.query('SELECT name, price, description FROM product WHERE id=?',[id]);
+        const [results] = await this.db.query("SELECT p.name, p.price, p.description, im.url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE p.id=? AND im.is_principal='1'",[id]);
         return results[0];
     }
 
     async getAll(){
-        const [results] = await this.db.query('SELECT name, price, description FROM product');
+        const [results] = await this.db.query("SELECT p.name, p.price, p.description, im.url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE im.is_principal='1'");
         return results;
     }
 
@@ -33,9 +41,30 @@ class Product{
     async seeder(){
         const clothesRawData = await fetch('https://fakestoreapi.com/products');
         const clothesJson = await clothesRawData.json();
-        clothesJson.forEach(product => {
-            this.create(product.title, product.price, product.description, product.id);
+        clothesJson.forEach(async(product) => {
+            const product_id_created = await this.create(product.title, product.price, product.description, product.id);
+            cloudinary.v2.uploader
+                    .upload(product.image, {folder: 'lecoincoin'}, (error, result) => {
+                        this.createImage(product.category, result.public_id, 1, product_id_created);
+                    });
         });
+    }
+
+    async createImage(description, url, is_principal, product_id){
+        await this.db.query(
+            'INSERT INTO image_product(description, url, is_principal, product_id) VALUES (?,?,?,?)',
+            [description, url, is_principal, product_id]
+        );
+    }
+
+    async getImages(productId){
+        const [results] = await this.db.query('SELECT description, url, id FROM image_product WHERE product_id=?',[productId]);
+        return results;
+    }
+
+    async deleteImage(imageId){
+        await this.db.query("DELETE FROM image_product WHERE id=? AND is_principal='0'",[imageId]);
+        // Warning other user can delete image of other product
     }
 
     async createComment(comment, user_id, productId){

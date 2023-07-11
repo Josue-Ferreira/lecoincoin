@@ -15,7 +15,7 @@ const getAllProducts = async(req, res) => {
 
 const getProduct = async(req, res) => {
     const {productId} = req.params;
-
+    
     try{
         const productAlone = await product.get(productId);
         res.json({'product': productAlone});
@@ -113,6 +113,40 @@ const deleteComment = async(req, res) => {
     }
 }
 
+const createImage = async(req, res) => {
+    const {description, url} = req.body;
+    const {productId} = req.params;
+
+    try{
+        await product.createImage(description, url, 0, productId);
+        res.sendStatus(200);
+    }catch(e){
+        console.error(e);
+    }
+}
+
+const getImages = async(req, res) => {
+    const {productId} = req.params;
+
+    try{
+        const images = await product.getImages(productId);
+        res.json({"images": images});
+    }catch(e){
+        console.error(e);
+    }
+}
+
+const deleteImage = async(req, res) => {
+    const {imageId} = req.params;
+
+    try{
+        await product.deleteImage(imageId);
+        res.sendStatus(200);
+    }catch(e){
+        console.error(e);
+    }
+}
+
 module.exports = {
     getAllProducts,
     getProduct,
@@ -123,5 +157,8 @@ module.exports = {
     getAllComments,
     createComment,
     updateComment,
-    deleteComment
+    deleteComment,
+    createImage,
+    getImages,
+    deleteImage
 }
