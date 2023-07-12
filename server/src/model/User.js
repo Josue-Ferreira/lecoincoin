@@ -15,6 +15,11 @@ class User{
         return results[0];
     }
 
+    async getUserCredentials(email){
+        const [results] = await this.db.query('SELECT password FROM user WHERE email=?',[email]);
+        return results[0];
+    }
+
     async updateUser(firstname, lastname, email, avatar_cloud){
         await this.db.query('UPDATE user SET firstname=?, lastname=?, avatar_cloud=? WHERE email=?',[firstname, lastname, avatar_cloud, email]);
         const result = this.getUser(email);

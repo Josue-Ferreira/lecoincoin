@@ -5,10 +5,11 @@ const User = require('../model/User');
 const user = new User(db.promisePool);
 
 const signup = async(req, res) => {
-    const {firstname, lastname, email, password, avatar_cloud} = req.body;
+    const {firstname, lastname, email, avatar_cloud} = req.body;
+    const hashedPassword = req.hashedPassword;
 
     try{
-        await user.createUser(firstname, lastname, email, password, avatar_cloud);
+        await user.createUser(firstname, lastname, email, hashedPassword, avatar_cloud);
         res.sendStatus(200);
     }catch(e){
         console.error(e);
@@ -20,6 +21,8 @@ const signin = async(req, res) => {
 
     try{
         const userProfile = await user.getUser(email);
+        res.append('Header', 'Bearer');
+        res.cookie('lecoincoin', req.token);
         res.json({'user': userProfile});
     }catch(e){
         console.error(e);
