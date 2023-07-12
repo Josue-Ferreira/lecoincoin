@@ -5,6 +5,8 @@ const db = new Database();
 db.connect();
 const User = require('../model/User');
 const user = new User(db.promisePool);
+const Product = require('../model/Product');
+const product = new Product(db.promisePool);
 
 const emailAccountExist = async(req, res, next) => {
     const {email, signup} = req.body; // signup = true we want no user to exist, signup = null we want user to exist
@@ -71,7 +73,29 @@ const verifyJWT = async(req, res, next) => {
     const token = req.cookies.lecoincoin;
     
     try {
-        if(token && jwt.verify(token, process.env.JWT_SECRET))
+        if(token){
+            try {
+                req.payloadJWT = jwt.verify(token, process.env.JWT_SECRET);
+                next();
+            } catch (e) {
+                console.error(e);
+                res.sendStatus(401);
+            }
+        }
+        else
+            res.sendStatus(401);
+    } catch (e) {
+        console.error(e);
+        res.sendStatus(500);
+    }
+}
+// A vérifier
+const isProductAuthor = async(req, res, next) => {
+    const {productId} = req.params;
+
+    try {
+        const emailAuthor = await product.getUserAuthor(productId);
+        if(emailAuthor === req.payloadJWT.email)
             next();
         else
             res.sendStatus(401);
@@ -81,10 +105,27 @@ const verifyJWT = async(req, res, next) => {
     }
 }
 
+const isCommentAuthor = async(req, res, next) => {
+    // const {productId} = req.params;
+
+    // try {
+    //     const emailAuthor = await product.getUserAuthor(productId);
+    //     if(emailAuthor === req.payloadJWT.email)
+    //         next();
+    //     else
+    //         res.sendStatus(401);
+    // } catch (e) {
+    //     console.error(e);
+    //     res.sendStatus(500);
+    // }
+}
+
 module.exports = {
     emailAccountExist,
     hashPassword,
     checkCredentials,
     createCookieJWT,
-    verifyJWT
+    verifyJWT,
+    isProductAuthor, 
+    isCommentAuthor
 }

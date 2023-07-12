@@ -28,6 +28,11 @@ class Product{
         return results;
     }
 
+    async getUserAuthor(productId){
+        const [results] = await this.db.query("SELECT u.email FROM user AS u INNER JOIN product AS p ON p.user_id=u.id WHERE p.id=?",[productId]);
+        return results[0];
+    }
+
     async update(name, price, description, id){
         await this.db.query('UPDATE product SET name=?, price=?, description=? WHERE id=?',[name, price, description, id]);
         const result = this.get(id);
