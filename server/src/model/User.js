@@ -16,7 +16,7 @@ class User{
     }
 
     async getUserCredentials(email){
-        const [results] = await this.db.query('SELECT password FROM user WHERE email=?',[email]);
+        const [results] = await this.db.query('SELECT password, id FROM user WHERE email=?',[email]);
         return results[0];
     }
 

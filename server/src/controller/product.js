@@ -3,6 +3,8 @@ const db = new Database();
 db.connect();
 const Product = require('../model/Product');
 const product = new Product(db.promisePool);
+const User = require('../model/User');
+const user = new User(db.promisePool);
 
 const getAllProducts = async(req, res) => {
     try{
@@ -25,10 +27,12 @@ const getProduct = async(req, res) => {
 }
 
 const createProduct = async(req, res) => {
-    const {name, price, description, user_id} = req.body;
+    const {name, price, description} = req.body; 
+    const email = req.payloadJWT.email;
 
     try{
-        await product.create(name, price, description, user_id);
+        const userCredentials = await user.getUserCredentials(email);
+        await product.create(name, price, description, userCredentials.id);
         res.sendStatus(200);
     }catch(e){
         console.error(e);
@@ -79,11 +83,13 @@ const getAllComments = async(req, res) => {
 }
 
 const createComment = async(req, res) => {
-    const {comment, user_id} = req.body;
+    const {comment} = req.body; 
     const {productId} = req.params;
+    const email = req.payloadJWT.email;
 
     try{
-        await product.createComment(comment, user_id, productId);
+        const userCredentials = await user.getUserCredentials(email);
+        await product.createComment(comment, userCredentials.id, productId);
         res.sendStatus(200);
     }catch(e){
         console.error(e);
@@ -95,8 +101,8 @@ const updateComment = async(req, res) => {
     const {comment} = req.body;
 
     try{
-        await product.updateComment(comment, commentId);
-        res.sendStatus(200);
+        const commentAlone = await product.updateComment(comment, commentId);
+        res.json({'comment': commentAlone});
     }catch(e){
         console.error(e);
     }

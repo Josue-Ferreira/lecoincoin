@@ -19,12 +19,12 @@ class Product{
     }
 
     async get(id){
-        const [results] = await this.db.query("SELECT p.name, p.price, p.description, im.url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE p.id=? AND im.is_principal='1'",[id]);
+        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.id, im.url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE p.id=?",[id]); //AND im.is_principal='1'
         return results[0];
     }
 
     async getAll(){
-        const [results] = await this.db.query("SELECT p.name, p.price, p.description, im.url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE im.is_principal='1'");
+        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.id, im.url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE im.is_principal='1'");
         return results;
     }
 
@@ -35,7 +35,7 @@ class Product{
 
     async update(name, price, description, id){
         await this.db.query('UPDATE product SET name=?, price=?, description=? WHERE id=?',[name, price, description, id]);
-        const result = this.get(id);
+        const result = await this.get(id);
         return result;
     }
 
@@ -69,7 +69,6 @@ class Product{
 
     async deleteImage(imageId){
         await this.db.query("DELETE FROM image_product WHERE id=? AND is_principal='0'",[imageId]);
-        // Warning other user can delete image of other product
     }
 
     async createComment(comment, user_id, productId){
@@ -80,12 +79,17 @@ class Product{
     }
 
     async getAllComments(product_id){
-        const [results] = await this.db.query('SELECT user_id, comment, created_at, updated_at FROM comment WHERE product_id=?', [product_id]);
+        const [results] = await this.db.query('SELECT c.id, c.comment, c.created_at, c.updated_at, u.firstname, u.lastname FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE product_id=?', [product_id]);
         return results;
     }
 
     async getComment(comment_id){
-        const [results] = await this.db.query('SELECT comment, created_at, updated_at FROM comment WHERE id=?', [comment_id]);
+        const [results] = await this.db.query('SELECT c.id, c.comment, c.created_at, c.updated_at, u.firstname, u.lastname FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE c.id=?', [comment_id]);
+        return results[0];
+    }
+
+    async getCommentUserAuthor(productId){
+        const [results] = await this.db.query("SELECT u.email FROM user AS u INNER JOIN comment AS c ON c.user_id=u.id WHERE c.id=?",[productId]);
         return results[0];
     }
 

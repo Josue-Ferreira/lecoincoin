@@ -89,13 +89,13 @@ const verifyJWT = async(req, res, next) => {
         res.sendStatus(500);
     }
 }
-// A vérifier
+
 const isProductAuthor = async(req, res, next) => {
     const {productId} = req.params;
-
+    
     try {
         const emailAuthor = await product.getUserAuthor(productId);
-        if(emailAuthor === req.payloadJWT.email)
+        if(emailAuthor.email === req.payloadJWT.email)
             next();
         else
             res.sendStatus(401);
@@ -106,18 +106,18 @@ const isProductAuthor = async(req, res, next) => {
 }
 
 const isCommentAuthor = async(req, res, next) => {
-    // const {productId} = req.params;
+    const {commentId} = req.params;
 
-    // try {
-    //     const emailAuthor = await product.getUserAuthor(productId);
-    //     if(emailAuthor === req.payloadJWT.email)
-    //         next();
-    //     else
-    //         res.sendStatus(401);
-    // } catch (e) {
-    //     console.error(e);
-    //     res.sendStatus(500);
-    // }
+    try {
+        const emailAuthor = await product.getCommentUserAuthor(commentId);
+        if(emailAuthor.email === req.payloadJWT.email)
+            next();
+        else
+            res.sendStatus(401);
+    } catch (e) {
+        console.error(e);
+        res.sendStatus(500);
+    }
 }
 
 module.exports = {
