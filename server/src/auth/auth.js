@@ -12,11 +12,11 @@ const emailAccountExist = async(req, res, next) => {
     const {email, signup} = req.body; // signup = true we want no user to exist, signup = null we want user to exist
 
     try{
-        const userExistHashedPassword = await user.getUserCredentials(email);
-        if(userExistHashedPassword && !signup){
-            req.hashedPassword = userExistHashedPassword.password;
+        const userExist = await user.getUserCredentials(email);
+        if(userExist && !signup && userExist.is_validated){
+            req.hashedPassword = userExist.hashedPassword;
             next();
-        }else if(!userExistHashedPassword && signup){
+        }else if(!userExist && signup){
             next();
         }else {
             signup ? res.sendStatus(409) : res.sendStatus(404);
@@ -35,6 +35,18 @@ const hashPassword = async(req, res, next) => {
         delete req.body.password;
         next();
     }catch(e){
+        console.error(e);
+        res.sendStatus(500);
+    }
+}
+
+const signupValidation = async(req, res) => {
+    const {tokenSignupMailValidation} = req.params;
+
+    try {
+        const userValidation = await user.signupValidation(tokenSignupMailValidation);
+        userValidation.changedRows == 1 ? res.sendStatus(200) : res.sendStatus(404);
+    } catch (e) {
         console.error(e);
         res.sendStatus(500);
     }
@@ -127,5 +139,6 @@ module.exports = {
     createCookieJWT,
     verifyJWT,
     isProductAuthor, 
-    isCommentAuthor
+    isCommentAuthor,
+    signupValidation
 }

@@ -3,11 +3,16 @@ class User{
         this.db = dbPoolPromise;
     }
 
-    async createUser(firstname, lastname, email, hashedPassword, avatar_cloud){
+    async createUser(firstname, lastname, email, hashedPassword, avatar_cloud, tokenSignupMailValidation){
         await this.db.query(
-            'INSERT INTO user(firstname,lastname,email,password,avatar_cloud) VALUES (?,?,?,?,?)',
-            [firstname, lastname, email, hashedPassword, avatar_cloud]
+            'INSERT INTO user(firstname,lastname,email,password,avatar_cloud,token) VALUES (?,?,?,?,?,?)',
+            [firstname, lastname, email, hashedPassword, avatar_cloud, tokenSignupMailValidation]
         );
+    }
+
+    async signupValidation(tokenSignupMailValidation){
+        const [result] = await this.db.query("UPDATE user SET is_validated='1' WHERE token=?", [tokenSignupMailValidation]);
+        return result;
     }
 
     async getUser(email){
@@ -16,7 +21,7 @@ class User{
     }
 
     async getUserCredentials(email){
-        const [results] = await this.db.query('SELECT password, id FROM user WHERE email=?',[email]);
+        const [results] = await this.db.query('SELECT password AS hashedPassword, id, is_validated FROM user WHERE email=?',[email]);
         return results[0];
     }
 

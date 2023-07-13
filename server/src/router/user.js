@@ -5,7 +5,8 @@ const userHandlers = require('../controller/user');
 const authHandlers = require('../auth/auth');
 const cookieParser = require('cookie-parser');
 
-router.get('/usersseeder',userHandlers.usersSeeder);
+router.get('/usersseeder', userHandlers.usersSeeder);
+router.get('/signup-validation/:tokenSignupMailValidation', authHandlers.signupValidation);
 
 // Mur de vérification si user exist
 router.use(authHandlers.emailAccountExist);

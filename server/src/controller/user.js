@@ -4,23 +4,27 @@ db.connect();
 const User = require('../model/User');
 const user = new User(db.promisePool);
 const mailer = require('../mail/mailer');
+const uid = require('uid2');
 
 const signup = async(req, res) => {
     const {firstname, lastname, email, avatar_cloud} = req.body;
     const hashedPassword = req.hashedPassword;
 
     try{
-        await user.createUser(firstname, lastname, email, hashedPassword, avatar_cloud);
+        const tokenSignupMailValidation = uid(32);
+        await user.createUser(firstname, lastname, email, hashedPassword, avatar_cloud, tokenSignupMailValidation);
         const info = await mailer.sendMail({
             from: "'LeCoinCoin' <no-reply@lecoincoin.com>",
             to: email,
             subject: 'Account created successfully !!!',
-            text: 'Congratulation ! Your account was sucessfully created'
+            text: 'Congratulation ! Your account was sucessfully created',
+            html: `<p>Please, you must validate your account before log in first time using this link : <a href="http://localhost:5050/user/signup-validation/${tokenSignupMailValidation}" target="_blank">Email account validation</a></p>`
         });
         console.log(info);
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -34,6 +38,7 @@ const signin = async(req, res) => {
         res.json({'user': userProfile});
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -46,6 +51,7 @@ const updateProfile = async(req, res) => {
         res.json({'user': userProfile});
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -57,6 +63,7 @@ const deleteProfile = async(req, res) => {
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -66,6 +73,7 @@ const usersSeeder = (req, res) => {
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 

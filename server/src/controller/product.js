@@ -12,6 +12,7 @@ const getAllProducts = async(req, res) => {
         res.json({'products': products});
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -23,6 +24,7 @@ const getProduct = async(req, res) => {
         res.json({'product': productAlone});
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -36,6 +38,7 @@ const createProduct = async(req, res) => {
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -48,6 +51,7 @@ const updateProduct = async(req, res) => {
         res.json({'product': productAlone});
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -59,6 +63,7 @@ const deleteProduct = async(req, res) => {
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -68,6 +73,7 @@ const productsSeeder = async(req, res) => {
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -79,6 +85,7 @@ const getAllComments = async(req, res) => {
         res.json({'comments' : comments});
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -93,6 +100,7 @@ const createComment = async(req, res) => {
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -105,6 +113,7 @@ const updateComment = async(req, res) => {
         res.json({'comment': commentAlone});
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -116,6 +125,7 @@ const deleteComment = async(req, res) => {
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -128,6 +138,7 @@ const createImage = async(req, res) => {
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -139,6 +150,7 @@ const getImages = async(req, res) => {
         res.json({"images": images});
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
@@ -150,6 +162,7 @@ const deleteImage = async(req, res) => {
         res.sendStatus(200);
     }catch(e){
         console.error(e);
+        res.sendStatus(500);
     }
 }
 
