@@ -14,6 +14,7 @@ import Signup from './pages/Signup';
 import Profile from './pages/Profile';
 import SuccessSignup from './pages/SuccessSignup';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import EmailValidation from './pages/EmailValidation';
 
 const router = createBrowserRouter([
   {
@@ -36,16 +37,20 @@ const router = createBrowserRouter([
     path: '/profile',
     element: <Profile />
   },
+  {
+    path: '/signup-validation',
+    element: <EmailValidation />
+  }
 ]);
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
     </Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
