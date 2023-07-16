@@ -5,7 +5,7 @@ const productHandlers = require('../controller/product');
 const authHandlers = require('../auth/auth');
 const cookieParser = require('cookie-parser');
 
-// router.get('/productsseeder', productHandlers.productsSeeder);
+router.get('/productsseeder', productHandlers.productsSeeder);
 
 router.get('/all', productHandlers.getAllProducts);
 router.get('/:productId', productHandlers.getProduct);

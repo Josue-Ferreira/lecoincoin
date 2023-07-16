@@ -1,13 +1,50 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import store from './app/store';
+import {
+  createBrowserRouter,
+  RouterProvider
+} from 'react-router-dom';
+import Home from './pages/Home';
+import Signin from './pages/Signin';
+import Signup from './pages/Signup';
+import Profile from './pages/Profile';
+import SuccessSignup from './pages/SuccessSignup';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <Home />
+  },
+  {
+    path: '/sign-in',
+    element: <Signin />
+  },
+  {
+    path: '/sign-up',
+    element: <Signup />
+  },
+  {
+    path: '/sign-up/success',
+    element: <SuccessSignup />
+  },
+  {
+    path: '/profile',
+    element: <Profile />
+  },
+]);
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );
 

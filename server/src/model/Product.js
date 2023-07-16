@@ -10,21 +10,21 @@ class Product{
         this.db = dbPoolPromise;
     }
 
-    async create(name, price, description, user_id){
+    async create(name, price, description, category, user_id){
         const [results] = await this.db.query(
-            'INSERT INTO product(name, price, description, user_id) VALUES (?,?,?,?)',
-            [name, price, description, user_id]
+            'INSERT INTO product(name, price, description, category, user_id) VALUES (?,?,?,?,?)',
+            [name, price, description, category, user_id]
         );
         return results.insertId;
     }
 
     async get(id){
-        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.id, im.url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE p.id=?",[id]); //AND im.is_principal='1'
+        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.category, p.id, im.url AS image_url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE p.id=?",[id]); //AND im.is_principal='1'
         return results[0];
     }
 
     async getAll(){
-        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.id, im.url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE im.is_principal='1'");
+        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.category, p.id, im.url AS image_url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE im.is_principal='1'");
         return results;
     }
 
@@ -33,8 +33,8 @@ class Product{
         return results[0];
     }
 
-    async update(name, price, description, id){
-        await this.db.query('UPDATE product SET name=?, price=?, description=? WHERE id=?',[name, price, description, id]);
+    async update(name, price, description, category, id){
+        await this.db.query('UPDATE product SET name=?, price=?, description=?, category=? WHERE id=?',[name, price, description, category, id]);
         const result = await this.get(id);
         return result;
     }
@@ -47,7 +47,7 @@ class Product{
         const clothesRawData = await fetch('https://fakestoreapi.com/products');
         const clothesJson = await clothesRawData.json();
         clothesJson.forEach(async(product) => {
-            const product_id_created = await this.create(product.title, product.price, product.description, product.id);
+            const product_id_created = await this.create(product.title, product.price, product.description, product.category, product.id);
             cloudinary.v2.uploader
                     .upload(product.image, {folder: 'lecoincoin'}, (error, result) => {
                         this.createImage(product.category, result.public_id, 1, product_id_created);

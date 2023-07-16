@@ -8,11 +8,8 @@ const cookieParser = require('cookie-parser');
 router.get('/usersseeder', userHandlers.usersSeeder);
 router.get('/signup-validation/:tokenSignupMailValidation', authHandlers.signupValidation);
 
-// Mur de vérification si user exist
-router.use(authHandlers.emailAccountExist);
-
-router.post('/signup', authHandlers.hashPassword, userHandlers.signup);
-router.post('/signin', authHandlers.checkCredentials, authHandlers.createCookieJWT, userHandlers.signin);
+router.post('/signup', authHandlers.emailAccountExist, authHandlers.hashPassword, userHandlers.signup);
+router.post('/signin', authHandlers.emailAccountExist, authHandlers.checkCredentials, authHandlers.createCookieJWT, userHandlers.signin);
 
 // Mur d'authentification
 router.use(cookieParser());

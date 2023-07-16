@@ -29,12 +29,12 @@ const getProduct = async(req, res) => {
 }
 
 const createProduct = async(req, res) => {
-    const {name, price, description} = req.body; 
+    const {name, price, description, category} = req.body; 
     const email = req.payloadJWT.email;
 
     try{
         const userCredentials = await user.getUserCredentials(email);
-        await product.create(name, price, description, userCredentials.id);
+        await product.create(name, price, description, category, userCredentials.id);
         res.sendStatus(200);
     }catch(e){
         console.error(e);
@@ -43,11 +43,11 @@ const createProduct = async(req, res) => {
 }
 
 const updateProduct = async(req, res) => {
-    const {name, price, description} = req.body;
+    const {name, price, description, category} = req.body;
     const {productId} = req.params;
 
     try{
-        const productAlone = await product.update(name, price, description, productId);
+        const productAlone = await product.update(name, price, description, category, productId);
         res.json({'product': productAlone});
     }catch(e){
         console.error(e);
