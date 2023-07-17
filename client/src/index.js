@@ -15,6 +15,7 @@ import Profile from './pages/Profile';
 import SuccessSignup from './pages/SuccessSignup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EmailValidation from './pages/EmailValidation';
+import Product from './pages/Product';
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
   {
     path: '/signup-validation',
     element: <EmailValidation />
+  },
+  {
+    path: '/product/:productID',
+    element: <Product />
   }
 ]);
 

@@ -1,4 +1,10 @@
 const uid = require('uid2');
+const cloudinary = require('cloudinary');
+cloudinary.config({ 
+    cloud_name: process.env.CLOUDINARY_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET 
+  });
 
 class User{
     constructor(dbPoolPromise){
@@ -43,7 +49,7 @@ class User{
     async usersSeeder(){
         const { faker } = require('@faker-js/faker');
         // or, if desiring a different locale
-        // const { fakerDE: faker } = require('@faker-js/faker');
+        // const { fakerDE: faker } = require('@faker-js/faker');users
         let randomFName, randomLName, randomEmail, randomPassword, randomAvatar, tokenSignupMailValidation;
     
         for(let i=0; i<100; i++){
@@ -54,9 +60,12 @@ class User{
             randomAvatar = faker.image.avatar();
             tokenSignupMailValidation = uid(32);
 
+            const result = await cloudinary.v2.uploader
+                .upload(randomAvatar, {folder: 'lecoincoin'});
+            
             await this.db.query(
                 'INSERT INTO user(firstname,lastname,email,password,avatar_cloud,token) VALUES (?,?,?,?,?,?)',
-                [randomFName,randomLName,randomEmail,randomPassword,randomAvatar,tokenSignupMailValidation]
+                [randomFName,randomLName,randomEmail,randomPassword,result.public_id,tokenSignupMailValidation]
             );
         }
     }

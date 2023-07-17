@@ -16,7 +16,7 @@ const SuccessSignup = () => {
     useEffect(() => {
         const timer = setTimeout(() => {
             navigate('/');
-        }, 1000);
+        }, 3000);
 
         return () => clearTimeout(timer);
     }, []);

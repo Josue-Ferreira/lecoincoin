@@ -7,6 +7,7 @@ import {
     CardText,
     Button
 } from 'reactstrap';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {AdvancedImage} from "@cloudinary/react";
 import {CloudinaryImage} from "@cloudinary/url-gen";
@@ -43,7 +44,8 @@ const ProductCard = ({product}) => {
                 </div>
                 <Button 
                     color={"success"}
-                    //onClick={handleCart}
+                    tag={Link}
+                    to={'/product/'+product.id}
                     >
                     Show more
                 </Button>

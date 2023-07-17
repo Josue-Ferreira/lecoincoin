@@ -1,8 +1,8 @@
 const cloudinary = require('cloudinary');
 cloudinary.config({ 
-    cloud_name: 'josueferreira', 
-    api_key: '877172724662548', 
-    api_secret: 'yWrfcVEPHDzBV4iDG9_iuFo51P0' 
+    cloud_name: process.env.CLOUDINARY_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET 
   });
 
 class Product{
@@ -19,12 +19,12 @@ class Product{
     }
 
     async get(id){
-        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.category, p.id, im.url AS image_url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE p.id=?",[id]); //AND im.is_principal='1'
+        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.category, p.id, u.firstname, u.lastname, u.email, u.avatar_cloud, im.url AS image_url FROM product AS p INNER JOIN user AS u ON u.id=p.user_id LEFT JOIN image_product AS im ON im.product_id=p.id AND im.is_principal='1' WHERE p.id=?",[id]);
         return results[0];
     }
 
     async getAll(){
-        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.category, p.id, im.url AS image_url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id WHERE im.is_principal='1'");
+        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.category, p.id, im.url AS image_url FROM product AS p LEFT JOIN image_product AS im ON im.product_id=p.id AND im.is_principal='1'");
         return results;
     }
 
@@ -72,19 +72,20 @@ class Product{
     }
 
     async createComment(comment, user_id, productId){
-        await this.db.query(
+        const [result] = await this.db.query(
             'INSERT INTO comment(comment, user_id, product_id, created_at) VALUES (?,?,?,NOW())',
             [comment, user_id, productId]
         );
+        return result;
     }
 
     async getAllComments(product_id){
-        const [results] = await this.db.query('SELECT c.id, c.comment, c.created_at, c.updated_at, u.firstname, u.lastname FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE product_id=?', [product_id]);
+        const [results] = await this.db.query("SELECT c.id, c.comment, DATE_FORMAT(c.created_at, '%H:%i:%s - %a, %D %b %Y') AS created_at, DATE_FORMAT(c.updated_at, '%H:%i:%s - %W %M %Y') AS updated_at, u.firstname, u.lastname, u.avatar_cloud, u.email FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE product_id=?", [product_id]);
         return results;
     }
 
     async getComment(comment_id){
-        const [results] = await this.db.query('SELECT c.id, c.comment, c.created_at, c.updated_at, u.firstname, u.lastname FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE c.id=?', [comment_id]);
+        const [results] = await this.db.query("SELECT c.id, c.comment, DATE_FORMAT(c.created_at, '%H:%i:%s - %a, %D %b %Y') AS created_at, DATE_FORMAT(c.updated_at, '%H:%i:%s - %W %M %Y') AS updated_at, u.firstname, u.lastname, u.avatar_cloud, u.email FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE c.id=?", [comment_id]);
         return results[0];
     }
 

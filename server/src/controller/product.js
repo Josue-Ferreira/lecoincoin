@@ -96,8 +96,9 @@ const createComment = async(req, res) => {
 
     try{
         const userCredentials = await user.getUserCredentials(email);
-        await product.createComment(comment, userCredentials.id, productId);
-        res.sendStatus(200);
+        const result = await product.createComment(comment, userCredentials.id, productId);
+        const newComment = await product.getComment(result.insertId);
+        res.json({'comment': newComment});
     }catch(e){
         console.error(e);
         res.sendStatus(500);
