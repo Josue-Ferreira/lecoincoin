@@ -52,7 +52,10 @@ class Product{
         const clothesRawData = await fetch('https://fakestoreapi.com/products');
         const clothesJson = await clothesRawData.json();
         clothesJson.forEach(async(product) => {
-            const product_id_created = await this.create(product.title, product.price, product.description, product.category, product.id);
+            let titleSplited = product.title.slice(0, 45).split(" ");
+            titleSplited.pop();
+            const titleShort = titleSplited.join(' ');
+            const product_id_created = await this.create(titleShort, product.price, product.description, product.category, product.id);
             cloudinary.v2.uploader
                     .upload(product.image, {folder: 'lecoincoin'}, (error, result) => {
                         this.createImage(product.category, result.public_id, 1, product_id_created);

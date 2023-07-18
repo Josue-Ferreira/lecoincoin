@@ -23,18 +23,18 @@ const ProductCard = ({product}) => {
     const myImage = new CloudinaryImage(product.image_url, {cloudName: process.env.REACT_APP_CLOUDINARY_NAME}).resize(fill().height(100));
     
     return (
-        <Card style={{height: '25rem', margin: '10px'}}>
+        <Card style={{height: '18rem', margin: '10px'}}>
             <ImageContainer>
                 <AdvancedImage cldImg={myImage} />
             </ImageContainer>
             <CardBody style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
                 <div>
-                    <CardTitle tag="h5">
+                    <CardTitle tag="h6">
                         {product.name}
                     </CardTitle>
                     <CardSubtitle
                         className="mb-2 text-muted"
-                        tag="h6"
+                        tag="h7"
                         >
                         {product.category}
                     </CardSubtitle>

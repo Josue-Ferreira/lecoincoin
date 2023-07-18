@@ -18,7 +18,7 @@ const Home = () => {
     return (
         <>
             <NavigationBar />
-            <ProductsList products={productsHome} />
+            <ProductsList products={productsHome} productPerRow={4} isAuthor={false} />
         </>
     );
 };

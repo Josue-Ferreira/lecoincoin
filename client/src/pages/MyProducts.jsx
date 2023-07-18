@@ -25,7 +25,7 @@ const MyProducts = () => {
         <>
            <NavigationBar />
            <Title>My Products</Title>
-           <ProductsList products={myProducts} />
+           <ProductsList products={myProducts} productPerRow={1} isAuthor={true} />
            <AddProduct /> 
         </>
     );
