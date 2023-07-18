@@ -2,16 +2,14 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { useSelector } from 'react-redux';
 import {AdvancedImage} from "@cloudinary/react";
-import {Cloudinary} from "@cloudinary/url-gen";
 import { 
     Button,
-    Form,
-    FormGroup,
-    Input,
     Popover,
-    PopoverBody
+    ListGroup,
+    ListGroupItem
 } from 'reactstrap';
 import {BsThreeDots} from 'react-icons/bs'
+import SubmitComment from './SubmitComment';
 
 const Comment = styled.div`
     display: flex;
@@ -35,16 +33,14 @@ const AuthorCommentInfos = styled.div`
     flex: 1;
 `;
 
-const CommentCard = ({comment, setComments, productID}) => {
+const Date = styled.div`
+    font-size: 0.7rem;
+`;
+
+const CommentCard = ({comment, comments, setComments, productID}) => {
     const user = useSelector(state => state.user.profile);
     const [modify, setModify] = useState(false);
-    const [modifiedComment, setModifiedComment] = useState(comment.comment);
     const [isOpenCommentActions, setIsOpenCommentActions] = useState(false);
-    const cld = new Cloudinary({
-        cloud: {
-          cloudName: process.env.REACT_APP_CLOUDINARY_NAME
-        }
-      }); 
     
     const handleDelete = async() => {
         const responseDB = await fetch(`/product/${productID}/comment/${comment.id}`,{
@@ -54,70 +50,51 @@ const CommentCard = ({comment, setComments, productID}) => {
             setComments(previous => previous.filter(element => comment.id != element.id));
         }
     }
-
-    const handleSubmitComment = async(e) => {
-        e.preventDefault();
-        if(modifiedComment.length > 0){
-            const responseDB = await fetch(`/product/${productID}/comment/${comment.id}`,{
-                method: 'PUT',
-                headers:{
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({"comment": modifiedComment})
-            });
-            if(responseDB.status == 200){
-                const responseDBJSON = await responseDB.json();
-                responseDBJSON.comment.avatar_cloud = cld.image(responseDBJSON.comment.avatar_cloud);
-                setComments(previous => previous.map(element => comment.id == element.id ? responseDBJSON.comment : element));
-            }
-            setModify(false);
-        }
-    } 
-
+    
     return (
         <Comment>
             <AuthorComment>
                 <AdvancedImage cldImg={comment.avatar_cloud} style={{maxHeight: '50px', borderRadius: '50%', marginRight: '10px'}} />
                 <AuthorCommentInfos>
                     <div>{comment.firstname} {comment.lastname}</div>
-                    <div>at {comment.created_at} {comment.updated_at && `updated at ${comment.updated_at}`}</div>
+                    <Date>at {comment.created_at} {comment.updated_at && `updated at ${comment.updated_at}`}</Date>
                 </AuthorCommentInfos>
                 {
                     user && comment.email == user.email && !modify && (
                         <>
-                            <Button outline id={'commentActions'+comment.id} style={{borderRadius: '100%', padding: '2px 8px'}}><BsThreeDots /></Button>
+                            <Button outline id={`commentActions${comment.id}`} style={{padding: '0 4px', border: 'none'}}><BsThreeDots /></Button>
                             <Popover
-                                target={'commentActions'+comment.id}
+                                target={`commentActions${comment.id}`}
                                 placement="bottom"
                                 trigger="focus"
                                 isOpen={isOpenCommentActions}
                                 toggle={() => setIsOpenCommentActions(!isOpenCommentActions)}
                             >
-                                <PopoverBody style={{display: 'flex', flexDirection: 'column'}}>
-                                    <Button onClick={() => setModify(true)} style={{marginBottom: "10px"}} color='warning'>Modify</Button> 
-                                    <Button onClick={handleDelete} style={{marginBottom: "10px"}} color='danger'>Delete</Button>
-                                </PopoverBody>
-                            </Popover>
+                                    <ListGroup flush>
+                                        <ListGroupItem
+                                            action
+                                            tag="button"
+                                            onClick={() => setModify(true)}
+                                            style={{borderRadius: '20px 20px 0 0'}}
+                                        >
+                                            Modify
+                                        </ListGroupItem>
+                                        <ListGroupItem
+                                            action
+                                            tag="button"
+                                            onClick={handleDelete}
+                                            style={{borderRadius: '0 0 20px 20px'}}
+                                        >
+                                            Delete
+                                        </ListGroupItem>
+                                    </ListGroup>
+                            </Popover> 
                         </>
                 )}
             </AuthorComment>
             {
                 modify 
-                ? (<Form onSubmit={handleSubmitComment} >
-                    <FormGroup>
-                        <Input
-                            id="exampleText"
-                            name="text"
-                            type="textarea"
-                            value={modifiedComment}
-                            onChange={e => setModifiedComment(e.target.value)}
-                            style={{marginBottom: '10px', resize: 'none'}}
-                        />
-                        <Button type='submit' color='success'>
-                            Modify
-                        </Button>
-                    </FormGroup>
-                    </Form>)
+                ? (<SubmitComment productID={productID} comments={comments} setComments={setComments} method={'PUT'} modify={modify} setModify={setModify} comment={comment}/>)
                 : (<p>{comment.comment}</p>)
             }
         </Comment>

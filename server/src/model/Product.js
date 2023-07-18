@@ -80,12 +80,12 @@ class Product{
     }
 
     async getAllComments(product_id){
-        const [results] = await this.db.query("SELECT c.id, c.comment, DATE_FORMAT(c.created_at, '%H:%i:%s - %a, %D %b %Y') AS created_at, DATE_FORMAT(c.updated_at, '%H:%i:%s - %W %M %Y') AS updated_at, u.firstname, u.lastname, u.avatar_cloud, u.email FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE product_id=?", [product_id]);
+        const [results] = await this.db.query("SELECT c.id, c.comment, DATE_FORMAT(c.created_at, '%H:%i - %e %b %Y') AS created_at, DATE_FORMAT(c.updated_at, '%H:%i - %e %b %Y') AS updated_at, u.firstname, u.lastname, u.avatar_cloud, u.email FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE product_id=?", [product_id]);
         return results;
     }
 
     async getComment(comment_id){
-        const [results] = await this.db.query("SELECT c.id, c.comment, DATE_FORMAT(c.created_at, '%H:%i:%s - %a, %D %b %Y') AS created_at, DATE_FORMAT(c.updated_at, '%H:%i:%s - %W %M %Y') AS updated_at, u.firstname, u.lastname, u.avatar_cloud, u.email FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE c.id=?", [comment_id]);
+        const [results] = await this.db.query("SELECT c.id, c.comment, DATE_FORMAT(c.created_at, '%H:%i - %e %b %Y') AS created_at, DATE_FORMAT(c.updated_at, '%H:%i - %e %b %Y') AS updated_at, u.firstname, u.lastname, u.avatar_cloud, u.email FROM comment AS c INNER JOIN user AS u ON u.id=c.user_id WHERE c.id=?", [comment_id]);
         return results[0];
     }
 
