@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {Cloudinary} from "@cloudinary/url-gen";
 import { 
     Button,
@@ -14,6 +14,15 @@ const SubmitComment = ({productID, comments, setComments, method, modify, setMod
           cloudName: process.env.REACT_APP_CLOUDINARY_NAME
         }
       }); 
+    const commentRef = useRef(null);
+
+    useEffect(() => {
+        if (commentRef.current) {
+            commentRef.current.style.height = "0px";
+            const scrollHeight = commentRef.current.scrollHeight + 20;
+            commentRef.current.style.height = scrollHeight + "px";
+        }
+    }, [newComment]);
 
     const handleSubmitComment = async(e) => {
         e.preventDefault();
@@ -51,6 +60,7 @@ const SubmitComment = ({productID, comments, setComments, method, modify, setMod
                     value={newComment}
                     onChange={e => setNewComment(e.target.value)}
                     style={{marginBottom: '10px', resize: 'none'}}
+                    innerRef={commentRef}
                 />
                 <Button type='submit' color={modify ? 'warning' : 'success'}>
                     {modify ? ('Modify comment') : ('Add new comment')}

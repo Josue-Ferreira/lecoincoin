@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Form,
     FormGroup,
@@ -24,6 +24,15 @@ const AddProduct = () => {
     const [price, setPrice] = useState();
     const [imagePrincipalFile, setImagePrincipalFile] = useState();
     const [warning, setWarning] = useState(false);
+    const descriptionRef = useRef(null);
+
+    useEffect(() => {
+        if (descriptionRef.current) {
+            descriptionRef.current.style.height = "0px";
+            const scrollHeight = descriptionRef.current.scrollHeight + 20;
+            descriptionRef.current.style.height = scrollHeight + "px";
+        }
+      }, [description]);
 
     const handleSubmit = async(e) => {
         e.preventDefault();
@@ -152,6 +161,7 @@ const AddProduct = () => {
                     placeholder="ex : white urban bike"
                     type="textarea"
                     value={description}
+                    innerRef={descriptionRef}
                     onChange={e => setDescription(e.target.value)}
                     style={{resize: 'none'}}
                     required
