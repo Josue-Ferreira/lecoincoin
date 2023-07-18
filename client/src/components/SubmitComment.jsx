@@ -17,8 +17,10 @@ const SubmitComment = ({productID, comments, setComments, method, modify, setMod
 
     const handleSubmitComment = async(e) => {
         e.preventDefault();
+        const urlPost = `/product/${productID}/comment/add-new`;
+        const urlPut = `/product/${productID}/comment/${comment.id}`;
         if(newComment){
-            const responseDB = await fetch(`/product/${productID}/comment/add-new`,{
+            const responseDB = await fetch(method === 'PUT' ? urlPut : urlPost,{
                 method: method,
                 headers:{
                     'Content-type': 'application/json'
