@@ -66,8 +66,8 @@ function NavigationBar() {
             </NavItem>
             <NavItem>
                 {user && (
-                  <NavLink tag={Link} to='/add-product'>
-                    Add New Product
+                  <NavLink tag={Link} to='/my-products'>
+                    My Products
                   </NavLink>
                 )}
             </NavItem>

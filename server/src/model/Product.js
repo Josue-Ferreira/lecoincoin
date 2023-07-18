@@ -28,6 +28,11 @@ class Product{
         return results;
     }
 
+    async getAllOfUser(email){
+        const [results] = await this.db.query("SELECT p.name, p.price, p.description, p.category, p.id, im.url AS image_url FROM product AS p INNER JOIN user AS u ON u.id=p.user_id LEFT JOIN image_product AS im ON im.product_id=p.id AND im.is_principal='1' WHERE u.email=?",[email]);
+        return results;
+    }
+
     async getUserAuthor(productId){
         const [results] = await this.db.query("SELECT u.email FROM user AS u INNER JOIN product AS p ON p.user_id=u.id WHERE p.id=?",[productId]);
         return results[0];

@@ -5,16 +5,15 @@ import {
     Label,
     Input,
     Button,
-    Alert
+    Alert,
+    Row,
+    Col
 } from 'reactstrap';
-import NavigationBar from '../components/NavigationBar';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-const Title = styled.h2`
-    text-align: center;
-    margin: 20px;
+const Title = styled.h3`
+    margin: 20px 0;
 `;
 
 const AddProduct = () => {
@@ -64,11 +63,10 @@ const AddProduct = () => {
 
     return (
         <>
-            <NavigationBar />
             <Form
                 style={{
-                    width: '50vw',
-                    margin: 'auto'}}
+                    width: '70vw',
+                    margin: '20px auto'}}
 
                 onSubmit={handleSubmit}
             >
@@ -80,34 +78,70 @@ const AddProduct = () => {
                         </Alert>
                     )
                 }
-                <FormGroup >
-                    <Label for="name">
-                    Product Name
-                    </Label>
-                    <Input
-                    id="name"
-                    name="name"
-                    placeholder="ex : bike"
-                    type="text"
-                    value={productName}
-                    onChange={e => setProductName(e.target.value)}
-                    required
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="category">
-                    Category
-                    </Label>
-                    <Input
-                    id="category"
-                    name="category"
-                    placeholder="ex : transport"
-                    type="text"
-                    value={category}
-                    onChange={e => setCategory(e.target.value)}
-                    required
-                    />
-                </FormGroup>
+                <Row xs="4">
+                    <Col>
+                        <FormGroup>
+                            <Label for="name">
+                                Product Name
+                            </Label>
+                            <Input
+                                id="name"
+                                name="name"
+                                placeholder="ex : bike"
+                                type="text"
+                                value={productName}
+                                onChange={e => setProductName(e.target.value)}
+                                required
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col>
+                        <FormGroup>
+                            <Label for="category">
+                                Category
+                            </Label>
+                            <Input
+                                id="category"
+                                name="category"
+                                placeholder="ex : transport"
+                                type="text"
+                                value={category}
+                                onChange={e => setCategory(e.target.value)}
+                                required
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col>
+                        <FormGroup>
+                            <Label for="price">
+                                Price
+                            </Label>
+                            <Input
+                                id="price"
+                                name="price"
+                                placeholder="ex : 100€"
+                                type="text"
+                                value={price}
+                                onChange={e => setPrice(e.target.value)}
+                                required
+                            />
+                        </FormGroup>
+                    </Col>
+                    <Col>
+                        <FormGroup >
+                            <Label for="imagePrincipal">
+                                Image
+                            </Label>
+                            <Input
+                                id="imagePrincipal"
+                                name="imagePrincipal"
+                                type="file"
+                                onChange={e => setImagePrincipalFile(e.target.files[0])}
+                                required
+                            />
+                        </FormGroup>
+                    </Col>
+                </Row>
                 <FormGroup>
                     <Label for="description">
                     Description
@@ -119,32 +153,7 @@ const AddProduct = () => {
                     type="textarea"
                     value={description}
                     onChange={e => setDescription(e.target.value)}
-                    required
-                    />
-                </FormGroup>
-                <FormGroup>
-                    <Label for="price">
-                    Price
-                    </Label>
-                    <Input
-                    id="price"
-                    name="price"
-                    placeholder="ex : 100€"
-                    type="text"
-                    value={price}
-                    onChange={e => setPrice(e.target.value)}
-                    required
-                    />
-                </FormGroup>
-                <FormGroup >
-                    <Label for="imagePrincipal">
-                    Image
-                    </Label>
-                    <Input
-                    id="imagePrincipal"
-                    name="imagePrincipal"
-                    type="file"
-                    onChange={e => setImagePrincipalFile(e.target.files[0])}
+                    style={{resize: 'none'}}
                     required
                     />
                 </FormGroup>

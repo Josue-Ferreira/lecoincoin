@@ -28,6 +28,18 @@ const getProduct = async(req, res) => {
     }
 }
 
+const getAllProductsOfUser = async(req, res) => {
+    const email = req.payloadJWT.email;
+
+    try {
+        const allProductsOfUser = await product.getAllOfUser(email);
+        res.json({"products": allProductsOfUser});
+    } catch (e) {
+        console.error(e);
+        res.sendStatus(500);
+    }
+}
+
 const createProduct = async(req, res) => {
     const {name, price, description, category, image_url} = req.body; 
     const email = req.payloadJWT.email;
@@ -171,6 +183,7 @@ const deleteImage = async(req, res) => {
 module.exports = {
     getAllProducts,
     getProduct,
+    getAllProductsOfUser,
     createProduct,
     updateProduct,
     deleteProduct,

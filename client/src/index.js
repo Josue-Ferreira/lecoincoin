@@ -16,8 +16,8 @@ import SuccessSignup from './pages/SuccessSignup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EmailValidation from './pages/EmailValidation';
 import Product from './pages/Product';
-import AddProduct from './pages/AddProduct';
 import ProtectedRoute from './pages/ProtectedRoute';
+import MyProducts from './pages/MyProducts';
 
 const router = createBrowserRouter([
   {
@@ -55,12 +55,12 @@ const router = createBrowserRouter([
     element: <Product />
   },
   {
-    path: '/add-product',
+    path: '/my-products',
     element: <ProtectedRoute />,
     children: [
       {
         path: '',
-        element: <AddProduct />
+        element: <MyProducts />
       }
     ]
   }
