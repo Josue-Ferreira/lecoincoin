@@ -65,14 +65,15 @@ function NavigationBar() {
                 </NavLink>
             </NavItem>
             <NavItem>
-                <NavLink >
-                Example
-                </NavLink>
+                {user && (
+                  <NavLink tag={Link} to='/add-product'>
+                    Add New Product
+                  </NavLink>
+                )}
             </NavItem>
             </Nav>
             {
-            user 
-            ? (
+            user ? (
                 <>
                     {avatar && <AdvancedImage style={{maxHeight: '50px', borderRadius: '50%', marginRight: '10px'}} cldImg={avatar} />}
                     <Button 
@@ -100,8 +101,7 @@ function NavigationBar() {
                         </PopoverBody>
                     </Popover>
                 </>
-            )
-            : (
+            ) : (
                 <Button 
                     color='primary' 
                     style={{marginRight: "10px"}}

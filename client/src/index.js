@@ -16,6 +16,8 @@ import SuccessSignup from './pages/SuccessSignup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EmailValidation from './pages/EmailValidation';
 import Product from './pages/Product';
+import AddProduct from './pages/AddProduct';
+import ProtectedRoute from './pages/ProtectedRoute';
 
 const router = createBrowserRouter([
   {
@@ -36,7 +38,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/profile',
-    element: <Profile />
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: '',
+        element: <Profile />
+      }
+    ]
   },
   {
     path: '/signup-validation',
@@ -45,6 +53,16 @@ const router = createBrowserRouter([
   {
     path: '/product/:productID',
     element: <Product />
+  },
+  {
+    path: '/add-product',
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: '',
+        element: <AddProduct />
+      }
+    ]
   }
 ]);
 

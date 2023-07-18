@@ -29,13 +29,14 @@ const getProduct = async(req, res) => {
 }
 
 const createProduct = async(req, res) => {
-    const {name, price, description, category} = req.body; 
+    const {name, price, description, category, image_url} = req.body; 
     const email = req.payloadJWT.email;
 
     try{
         const userCredentials = await user.getUserCredentials(email);
-        await product.create(name, price, description, category, userCredentials.id);
-        res.sendStatus(200);
+        const product_id = await product.create(name, price, description, category, userCredentials.id);
+        await product.createImage(name, image_url, 1, product_id);
+        res.json({'productID': product_id});
     }catch(e){
         console.error(e);
         res.sendStatus(500);
