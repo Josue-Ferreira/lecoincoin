@@ -2,17 +2,11 @@ import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { useSelector } from 'react-redux';
 import {AdvancedImage} from "@cloudinary/react";
-import { 
-    Button,
-    Popover,
-    ListGroup,
-    ListGroupItem
-} from 'reactstrap';
-import {BsThreeDots} from 'react-icons/bs'
 import SubmitComment from './SubmitComment';
 import { useDispatch } from 'react-redux';
 import { removeComment } from '../features/comment/commentSlice';
 import { fetchDelete } from '../helpers/fetchBack';
+import MenuModifyDelete from './MenuModifyDelete';
 
 const Comment = styled.div`
     display: flex;
@@ -44,7 +38,6 @@ const CommentCard = ({comment, productID}) => {
     const user = useSelector(state => state.user.profile);
     const dispatch = useDispatch();
     const [modify, setModify] = useState(false);
-    const [isOpenCommentActions, setIsOpenCommentActions] = useState(false);
     
     const handleDelete = async() => {
         const responseDB = await fetchDelete(`/product/${productID}/comment/${comment.id}`);
@@ -63,35 +56,7 @@ const CommentCard = ({comment, productID}) => {
                 </AuthorCommentInfos>
                 {
                     user && comment.email == user.email && !modify && (
-                        <>
-                            <Button outline id={`commentActions${comment.id}`} style={{padding: '0 4px', border: 'none'}}><BsThreeDots /></Button>
-                            <Popover
-                                target={`commentActions${comment.id}`}
-                                placement="bottom"
-                                trigger="focus"
-                                isOpen={isOpenCommentActions}
-                                toggle={() => setIsOpenCommentActions(!isOpenCommentActions)}
-                            >
-                                    <ListGroup flush>
-                                        <ListGroupItem
-                                            action
-                                            tag="button"
-                                            onClick={() => setModify(true)}
-                                            style={{borderRadius: '20px 20px 0 0'}}
-                                        >
-                                            Modify
-                                        </ListGroupItem>
-                                        <ListGroupItem
-                                            action
-                                            tag="button"
-                                            onClick={handleDelete}
-                                            style={{borderRadius: '0 0 20px 20px'}}
-                                        >
-                                            Delete
-                                        </ListGroupItem>
-                                    </ListGroup>
-                            </Popover> 
-                        </>
+                        <MenuModifyDelete component={comment} setModify={setModify} handleDelete={handleDelete} />
                 )}
             </AuthorComment>
             {

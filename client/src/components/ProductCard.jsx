@@ -6,19 +6,16 @@ import {
     CardSubtitle,
     CardText,
     Button,
-    Popover,
-    ListGroup,
-    ListGroupItem
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {AdvancedImage} from "@cloudinary/react";
 import {CloudinaryImage} from "@cloudinary/url-gen";
 import { fill } from "@cloudinary/url-gen/actions/resize";
-import {BsThreeDots} from 'react-icons/bs';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeProduct } from '../features/product/productSlice';
 import { fetchDelete } from '../helpers/fetchBack';
+import MenuModifyDelete from './MenuModifyDelete';
 
 const ImageContainer = styled.div`
     display: flex;
@@ -26,9 +23,17 @@ const ImageContainer = styled.div`
     margin-top: 10px;
 `;
 
+const MenuCard = styled.div`
+    margin: 2px;
+    padding: 0 4px;
+    border: none;
+    position: absolute; 
+    right: 0;
+    top: 0;
+`;
+
 const ProductCard = ({product, setModify}) => {
     const myImage = new CloudinaryImage(product.image_url, {cloudName: process.env.REACT_APP_CLOUDINARY_NAME}).resize(fill().height(100));
-    const [isOpenProductActions, setIsOpenProductActions] = useState(false);
     const isAuthor = useSelector(state => state.products.isAuthor);
     const dispatch = useDispatch();
 
@@ -44,41 +49,9 @@ const ProductCard = ({product, setModify}) => {
             <ImageContainer>
                 <AdvancedImage cldImg={myImage} />
                 {isAuthor && (
-                    <>
-                        <Button 
-                            outline 
-                            id={`productActions${product.id}`} 
-                            style={{margin: '2px', padding: '0 4px', border: 'none', position: 'absolute', right: '0', top: '0'}}
-                        >
-                            <BsThreeDots />
-                        </Button>
-                        <Popover
-                            target={`productActions${product.id}`}
-                            placement="bottom"
-                            trigger="focus"
-                            isOpen={isOpenProductActions}
-                            toggle={() => setIsOpenProductActions(!isOpenProductActions)}
-                        >
-                            <ListGroup flush>
-                                <ListGroupItem
-                                    action
-                                    tag="button"
-                                    onClick={() => setModify(true)}
-                                    style={{borderRadius: '20px 20px 0 0'}}
-                                >
-                                    Modify
-                                </ListGroupItem>
-                                <ListGroupItem
-                                    action
-                                    tag="button"
-                                    onClick={handleDelete}
-                                    style={{borderRadius: '0 0 20px 20px'}}
-                                >
-                                    Delete
-                                </ListGroupItem>
-                            </ListGroup>
-                        </Popover> 
-                    </>
+                    <MenuCard>
+                        <MenuModifyDelete component={product} setModify={setModify} handleDelete={handleDelete} />
+                    </MenuCard>
                 )}
             </ImageContainer>
             <CardBody style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
