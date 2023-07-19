@@ -8,7 +8,6 @@ import {
 import ModifyProductCard from './ModifyProductCard';
 import { useSelector } from 'react-redux';
 
-// const ProductsList = ({products, setMyProducts, productPerRow, isAuthor}) => {
 const ProductsList = ({setMyProducts, productPerRow}) => {
     const products = useSelector(state => state.products.content);
     const isAuthor = useSelector(state => state.products.isAuthor);
@@ -19,7 +18,6 @@ const ProductsList = ({setMyProducts, productPerRow}) => {
                 {
                     products && products.map(product => (
                         <Col key={product.id}>
-                            {/* {isAuthor ? (<ModifyProductCard product={product} setMyProducts={setMyProducts} />) : (<ProductCard product={product} />)} */}
                             {isAuthor ? (<ModifyProductCard product={product} />) : (<ProductCard product={product} />)}
                         </Col>
                     ))

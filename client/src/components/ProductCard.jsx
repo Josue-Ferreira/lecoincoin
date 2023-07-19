@@ -25,7 +25,6 @@ const ImageContainer = styled.div`
     margin-top: 10px;
 `;
 
-// const ProductCard = ({product, isAuthor, setModify, handleDelete}) => {
 const ProductCard = ({product, setModify}) => {
     const myImage = new CloudinaryImage(product.image_url, {cloudName: process.env.REACT_APP_CLOUDINARY_NAME}).resize(fill().height(100));
     const [isOpenProductActions, setIsOpenProductActions] = useState(false);
@@ -73,7 +72,6 @@ const ProductCard = ({product, setModify}) => {
                                 <ListGroupItem
                                     action
                                     tag="button"
-                                    // onClick={handleDelete}
                                     onClick={handleDelete}
                                     style={{borderRadius: '0 0 20px 20px'}}
                                 >

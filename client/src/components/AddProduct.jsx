@@ -5,16 +5,13 @@ import {
     Label,
     Input,
     Button,
-    Alert,
     Row,
     Col
 } from 'reactstrap';
-// import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addProduct, updateProduct } from '../features/product/productSlice';
 
-// const AddProduct = ({setWarning, product, modify, setModify, setMyProducts}) => {
 const AddProduct = ({setWarning, product, modify, setModify}) => {
     const navigate = useNavigate();
     const [productName, setProductName] = useState(product ? product.name : '');
@@ -69,7 +66,6 @@ const AddProduct = ({setWarning, product, modify, setModify}) => {
                 }
                 else{
                     setModify(false);
-                    // setMyProducts(previous => previous.map(element => responseDBJSON.product.id == element.id ? responseDBJSON.product : element));
                     dispatch(updateProduct(responseDBJSON.product));
                 }
             }else{

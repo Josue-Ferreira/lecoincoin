@@ -9,7 +9,6 @@ import {
 import { useDispatch } from 'react-redux';
 import { addComment, updateComment } from '../features/comment/commentSlice';
 
-// const SubmitComment = ({productID, comments, setComments, method, modify, setModify, comment}) => {
 const SubmitComment = ({productID, modify, setModify, comment}) => {
     const [newComment, setNewComment] = useState(comment ? comment.comment : '');
     const cld = new Cloudinary({
@@ -44,14 +43,12 @@ const SubmitComment = ({productID, modify, setModify, comment}) => {
                 const responseDBJSON = await responseDB.json();
                 responseDBJSON.comment.avatar_cloud = cld.image(responseDBJSON.comment.avatar_cloud);
                 if(modify){
-                    // setComments(previous => previous.map(element => responseDBJSON.comment.id == element.id ? responseDBJSON.comment : element));
                     dispatch(updateComment(responseDBJSON.comment));
                     setModify(false);
                 }
                 else{
                     dispatch(addComment(responseDBJSON.comment));
                 }
-                    // setComments([...comments, responseDBJSON.comment]);
                 setNewComment('');
             }
         }

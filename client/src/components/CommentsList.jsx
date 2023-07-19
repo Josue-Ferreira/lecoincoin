@@ -14,7 +14,6 @@ const CommentContainer = styled.div`
 `;
 
 const CommentsList = ({productID}) => {
-    // const [comments, setComments] = useState();
     const user = useSelector(state => state.user.profile);
     const comments = useSelector(state => state.comments.content);
     const dispatch = useDispatch();
@@ -32,7 +31,6 @@ const CommentsList = ({productID}) => {
                 responseDBJSON.comments.forEach((comment,i) => {
                     responseDBJSON.comments[i].avatar_cloud = cld.image(comment.avatar_cloud)
                 });
-                // setComments(responseDBJSON.comments);
                 dispatch(refreshAllList(responseDBJSON.comments));
             }
         }
@@ -43,7 +41,6 @@ const CommentsList = ({productID}) => {
     return (
         <CommentContainer>
             {comments && comments.map(comment => (
-                // <CommentCard key={comment.id} comment={comment} comments={comments} setComments={setComments} productID={productID} />
                 <CommentCard key={comment.id} comment={comment} productID={productID} />
             ))}
             {user && <SubmitComment productID={productID} />}

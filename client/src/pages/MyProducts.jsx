@@ -23,7 +23,6 @@ const TitleAdd = styled.h3`
 `;
 
 const MyProducts = () => {
-    // const [myProducts, setMyProducts] = useState();
     const [warning, setWarning] = useState(false);
     const dispatch = useDispatch();
 
@@ -31,7 +30,6 @@ const MyProducts = () => {
         const getProducts = async() => {
             const productsRawData = await fetch('/product/user');
             const productsJson = await productsRawData.json();
-            // setMyProducts(productsJson.products);
             dispatch(refreshAllList(productsJson.products));
             dispatch(setAuthor(true));
         }
@@ -44,7 +42,6 @@ const MyProducts = () => {
            <NavigationBar />
            <PageContainer>
                 <Title>My Products</Title>
-                {/* <ProductsList products={myProducts} productPerRow={1} isAuthor={true} setMyProducts={setMyProducts} /> */}
                 <ProductsList productPerRow={1} />
                 <TitleAdd>Add new product to sell</TitleAdd>
                 {
