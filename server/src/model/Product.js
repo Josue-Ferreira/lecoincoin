@@ -15,7 +15,8 @@ class Product{
             'INSERT INTO product(name, price, description, category, user_id) VALUES (?,?,?,?,?)',
             [name, price, description, category, user_id]
         );
-        return results.insertId;
+        const result = await this.get(results.insertId);
+        return result;
     }
 
     async get(id){

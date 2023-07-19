@@ -11,8 +11,11 @@ import {
 } from 'reactstrap';
 // import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addProduct, updateProduct } from '../features/product/productSlice';
 
-const AddProduct = ({setWarning, product, modify, setModify, setMyProducts}) => {
+// const AddProduct = ({setWarning, product, modify, setModify, setMyProducts}) => {
+const AddProduct = ({setWarning, product, modify, setModify}) => {
     const navigate = useNavigate();
     const [productName, setProductName] = useState(product ? product.name : '');
     const [category, setCategory] = useState(product ? product.category : '');
@@ -20,6 +23,7 @@ const AddProduct = ({setWarning, product, modify, setModify, setMyProducts}) => 
     const [price, setPrice] = useState(product ? product.price : '');
     const [imagePrincipalFile, setImagePrincipalFile] = useState();
     const descriptionRef = useRef(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (descriptionRef.current) {
@@ -59,11 +63,14 @@ const AddProduct = ({setWarning, product, modify, setModify, setMyProducts}) => 
             });
             if(responseDB.ok){
                 const responseDBJSON = await responseDB.json();
-                if(!modify)
-                    navigate('/product/'+responseDBJSON.productID);
+                if(!modify){
+                    dispatch(addProduct(responseDBJSON.product))
+                    navigate('/product/'+responseDBJSON.product.id);
+                }
                 else{
                     setModify(false);
-                    setMyProducts(previous => previous.map(element => responseDBJSON.product.id == element.id ? responseDBJSON.product : element));
+                    // setMyProducts(previous => previous.map(element => responseDBJSON.product.id == element.id ? responseDBJSON.product : element));
+                    dispatch(updateProduct(responseDBJSON.product));
                 }
             }else{
                 throw new Error('An error has occured: '+responseDB.status);
@@ -166,6 +173,13 @@ const AddProduct = ({setWarning, product, modify, setModify, setMyProducts}) => 
                 <Button type='submit' color='primary' >
                     Submit
                 </Button>
+                {
+                    modify && (
+                        <Button onClick={() => setModify(false)} color='danger' style={{marginLeft: '10px'}}>
+                            Cancel
+                        </Button>
+                    )
+                }
             </Form>
         </>
     );

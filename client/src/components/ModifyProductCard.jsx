@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import ProductCard from './ProductCard';
-import AddProduct from '../pages/AddProduct';
+import AddProduct from './AddProduct';
 import {
     Card,
     Alert
@@ -16,18 +16,19 @@ const ImageContainer = styled.div`
     margin-top: 10px;
 `;
 
-const ModifyProductCard = ({product, setMyProducts}) => {
+// const ModifyProductCard = ({product, setMyProducts}) => {
+const ModifyProductCard = ({product}) => {
     const [modify, setModify] = useState(false);
     const [warning, setWarning] = useState(false);
     
-    const handleDelete = async() => {
-        const responseDB = await fetch(`/product/${product.id}`,{
-            method: 'DELETE'
-        });
-        if(responseDB.status == 200){
-            setMyProducts(previous => previous.filter(element => product.id != element.id));
-        }
-    }
+    // const handleDelete = async() => {
+    //     const responseDB = await fetch(`/product/${product.id}`,{
+    //         method: 'DELETE'
+    //     });
+    //     if(responseDB.status == 200){
+    //         setMyProducts(previous => previous.filter(element => product.id != element.id));
+    //     }
+    // }
 
     const myImage = new CloudinaryImage(product.image_url, {cloudName: process.env.REACT_APP_CLOUDINARY_NAME}).resize(fill().height(100));
 
@@ -46,10 +47,12 @@ const ModifyProductCard = ({product, setMyProducts}) => {
                         <ImageContainer>
                             <AdvancedImage cldImg={myImage} />
                         </ImageContainer>
-                        <AddProduct setWarning={setWarning} product={product} modify={modify} setModify={setModify} setMyProducts={setMyProducts}/>
+                        {/* <AddProduct setWarning={setWarning} product={product} modify={modify} setModify={setModify} setMyProducts={setMyProducts}/> */}
+                        <AddProduct setWarning={setWarning} product={product} modify={modify} setModify={setModify} />
                     </Card>
                 ):(
-                    <ProductCard product={product} isAuthor={true} setModify={setModify} handleDelete={handleDelete}/>
+                    // <ProductCard product={product} isAuthor={true} setModify={setModify} handleDelete={handleDelete}/>
+                    <ProductCard product={product} setModify={setModify} />
                 )
             }
         </>

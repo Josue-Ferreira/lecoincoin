@@ -16,6 +16,8 @@ import {AdvancedImage} from "@cloudinary/react";
 import {CloudinaryImage} from "@cloudinary/url-gen";
 import { fill } from "@cloudinary/url-gen/actions/resize";
 import {BsThreeDots} from 'react-icons/bs';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeProduct } from '../features/product/productSlice';
 
 const ImageContainer = styled.div`
     display: flex;
@@ -23,9 +25,21 @@ const ImageContainer = styled.div`
     margin-top: 10px;
 `;
 
-const ProductCard = ({product, isAuthor, setModify, handleDelete}) => {
+// const ProductCard = ({product, isAuthor, setModify, handleDelete}) => {
+const ProductCard = ({product, setModify}) => {
     const myImage = new CloudinaryImage(product.image_url, {cloudName: process.env.REACT_APP_CLOUDINARY_NAME}).resize(fill().height(100));
     const [isOpenProductActions, setIsOpenProductActions] = useState(false);
+    const isAuthor = useSelector(state => state.products.isAuthor);
+    const dispatch = useDispatch();
+
+    const handleDelete = async() => {
+        const responseDB = await fetch(`/product/${product.id}`,{
+            method: 'DELETE'
+        });
+        if(responseDB.status == 200){
+            dispatch(removeProduct(product.id));
+        }
+    }
     
     return (
         <Card style={isAuthor ? {margin: '10px'} : {height: '17rem', margin: '10px'}}>
@@ -59,6 +73,7 @@ const ProductCard = ({product, isAuthor, setModify, handleDelete}) => {
                                 <ListGroupItem
                                     action
                                     tag="button"
+                                    // onClick={handleDelete}
                                     onClick={handleDelete}
                                     style={{borderRadius: '0 0 20px 20px'}}
                                 >
