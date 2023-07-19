@@ -18,7 +18,7 @@ const signup = async(req, res) => {
             to: email,
             subject: 'Account created successfully !!!',
             text: 'Congratulation ! Your account was sucessfully created',
-            html: `<p>Please, you must validate your account before log in first time using this link : <a href="http://localhost:5050/user/signup-validation/${tokenSignupMailValidation}" target="_blank">Email account validation</a></p>`
+            html: `<p>Please, you must validate your account before log in first time using this link : <a href="${process.env.URL_FRONTEND}?token=${tokenSignupMailValidation}" target="_blank">Email account validation</a></p>`
         });
         console.log(info);
         res.sendStatus(200);

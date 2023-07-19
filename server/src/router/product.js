@@ -4,10 +4,14 @@ const router = express.Router();
 const productHandlers = require('../controller/product');
 const authHandlers = require('../auth/auth');
 const cookieParser = require('cookie-parser');
+router.use(cookieParser());
 
-// router.get('/productsseeder', productHandlers.productsSeeder);
+router.get('/productsseeder', productHandlers.productsSeeder);
 
 router.get('/all', productHandlers.getAllProducts);
+// All products per user
+router.get('/user', authHandlers.verifyJWT, productHandlers.getAllProductsOfUser);
+
 router.get('/:productId', productHandlers.getProduct);
 // Secondary images
 router.get('/:productId/images', productHandlers.getImages);
@@ -15,7 +19,6 @@ router.get('/:productId/images', productHandlers.getImages);
 router.get('/:productId/comment/all', productHandlers.getAllComments);
 
 // Mur d'authentification
-router.use(cookieParser());
 router.use(authHandlers.verifyJWT);
 
 router.post('/add-new', productHandlers.createProduct);

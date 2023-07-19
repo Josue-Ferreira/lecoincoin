@@ -28,14 +28,27 @@ const getProduct = async(req, res) => {
     }
 }
 
+const getAllProductsOfUser = async(req, res) => {
+    const email = req.payloadJWT.email;
+
+    try {
+        const allProductsOfUser = await product.getAllOfUser(email);
+        res.json({"products": allProductsOfUser});
+    } catch (e) {
+        console.error(e);
+        res.sendStatus(500);
+    }
+}
+
 const createProduct = async(req, res) => {
-    const {name, price, description} = req.body; 
+    const {name, price, description, category, image_url} = req.body; 
     const email = req.payloadJWT.email;
 
     try{
         const userCredentials = await user.getUserCredentials(email);
-        await product.create(name, price, description, userCredentials.id);
-        res.sendStatus(200);
+        const newProduct = await product.create(name, price, description, category, userCredentials.id);
+        await product.createImage(name, image_url, 1, newProduct.id);
+        res.json({'product': newProduct});
     }catch(e){
         console.error(e);
         res.sendStatus(500);
@@ -43,11 +56,13 @@ const createProduct = async(req, res) => {
 }
 
 const updateProduct = async(req, res) => {
-    const {name, price, description} = req.body;
+    const {name, price, description, category, image_url} = req.body;
     const {productId} = req.params;
 
     try{
-        const productAlone = await product.update(name, price, description, productId);
+        if(image_url)
+            await product.updateImagePrincipal(image_url,productId);
+        const productAlone = await product.update(name, price, description, category, productId);
         res.json({'product': productAlone});
     }catch(e){
         console.error(e);
@@ -96,8 +111,9 @@ const createComment = async(req, res) => {
 
     try{
         const userCredentials = await user.getUserCredentials(email);
-        await product.createComment(comment, userCredentials.id, productId);
-        res.sendStatus(200);
+        const result = await product.createComment(comment, userCredentials.id, productId);
+        const newComment = await product.getComment(result.insertId);
+        res.json({'comment': newComment});
     }catch(e){
         console.error(e);
         res.sendStatus(500);
@@ -169,6 +185,7 @@ const deleteImage = async(req, res) => {
 module.exports = {
     getAllProducts,
     getProduct,
+    getAllProductsOfUser,
     createProduct,
     updateProduct,
     deleteProduct,
