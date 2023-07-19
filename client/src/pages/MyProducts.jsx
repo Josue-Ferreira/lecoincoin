@@ -8,6 +8,7 @@ import {
 } from 'reactstrap'
 import { useDispatch } from 'react-redux';
 import { refreshAllList, setAuthor } from '../features/product/productSlice';
+import { fetchGet } from '../helpers/fetchBack';
 
 const PageContainer = styled.div`
     width: 70vw;
@@ -28,9 +29,8 @@ const MyProducts = () => {
 
     useEffect(() => {
         const getProducts = async() => {
-            const productsRawData = await fetch('/product/user');
-            const productsJson = await productsRawData.json();
-            dispatch(refreshAllList(productsJson.products));
+            const json = await fetchGet('/product/user');
+            dispatch(refreshAllList(json.products));
             dispatch(setAuthor(true));
         }
 

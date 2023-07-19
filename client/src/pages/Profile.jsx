@@ -11,6 +11,7 @@ import {
     Button,
     Alert
 } from 'reactstrap';
+import { fetchPUT, postImage } from '../helpers/fetchBack';
 
 const Container = styled.div`
     display: flex;
@@ -36,35 +37,13 @@ const Profile = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        let avatar_cloud;
-        if(avatarFile){
-            const formData = new FormData();
-            formData.append('file', avatarFile);
-            formData.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET);
-            const responseCloud = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`,{
-                method: 'POST',
-                body: formData
-            });
-            if(responseCloud.ok){
-                const responseCloudJSON = await responseCloud.json();
-                avatar_cloud = responseCloudJSON.public_id;
-            }
-        }
-        const responseDB = await fetch('/user',{
-            method: 'PUT',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({"firstname": firstName, "lastname": lastName, "avatar_cloud": avatar_cloud})
-        });
-        if(responseDB.status == 200){
-            const responseJson = await responseDB.json();
-            console.log(responseJson.user)
-            dispatch(logIn(responseJson.user));
+        try {
+            const avatar_cloud = avatarFile ? await postImage(avatarFile) : null;
+            const json = await fetchPUT('/user', {"firstname": firstName, "lastname": lastName, "avatar_cloud": avatar_cloud});
+            dispatch(logIn(json.user));
             setSuccessUpdate(true);
             setWarning(false);
-        }
-        else{
+        } catch (e) {
             setSuccessUpdate(false);
             setWarning(true);
         }

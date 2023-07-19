@@ -56,10 +56,12 @@ const createProduct = async(req, res) => {
 }
 
 const updateProduct = async(req, res) => {
-    const {name, price, description, category} = req.body;
+    const {name, price, description, category, image_url} = req.body;
     const {productId} = req.params;
 
     try{
+        if(image_url)
+            await product.updateImagePrincipal(image_url,productId);
         const productAlone = await product.update(name, price, description, category, productId);
         res.json({'product': productAlone});
     }catch(e){

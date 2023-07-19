@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 import { logIn } from '../features/user/userSlice';
+import { fetchPOST } from '../helpers/fetchBack';
 
 const Container = styled.div`
     display: flex;
@@ -36,23 +37,14 @@ const Signin = () => {
     const navigate = useNavigate();
 
     const handleSignIn = async() => {
-        const responseDB = await fetch('/user/signin',{
-            method: "POST",
-            headers:{
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({"email": email, "password": password})
-        });
-        if(responseDB.status == 200){
-            const responseJson = await responseDB.json();
-            dispatch(logIn(responseJson.user));
+        try {
+            const json = await fetchPOST('/user/signin', {"email": email, "password": password});
+            dispatch(logIn(json.user));
             setValidCredentials(true);
             navigate('/');
-        }
-        else{
+        } catch (e) {
             setValidCredentials(false);
-        }
-            
+        }    
     }
 
     return (

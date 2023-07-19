@@ -6,6 +6,7 @@ import {AdvancedImage} from "@cloudinary/react";
 import {Cloudinary} from "@cloudinary/url-gen";
 import {Button} from 'reactstrap';
 import CommentsList from '../components/CommentsList';
+import { fetchGet } from '../helpers/fetchBack';
 
 const ProductContainer = styled.div`
     display: flex;
@@ -51,15 +52,12 @@ const Product = () => {
 
     useEffect(() => {
         const getProduct = async() => {
-            const responseDB = await fetch('/product/'+productID);
-            if(responseDB.status == 200){
-                const responseDBJSON = await responseDB.json();
-                setProduct(responseDBJSON.product);
-                const image = cld.image(responseDBJSON.product.image_url);
-                setImagePrincipal(image);
-                const seller = cld.image(responseDBJSON.product.avatar_cloud);
-                setSellerAvatar(seller);
-            }
+            const json = await fetchGet('/product/'+productID);
+            setProduct(json.product);
+            const image = cld.image(json.product.image_url);
+            setImagePrincipal(image);
+            const seller = cld.image(json.product.avatar_cloud);
+            setSellerAvatar(seller);
         }
 
         getProduct();

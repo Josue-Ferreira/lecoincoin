@@ -11,6 +11,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addProduct, updateProduct } from '../features/product/productSlice';
+import { fetchPOST, fetchPUT, postImage } from '../helpers/fetchBack';
 
 const AddProduct = ({setWarning, product, modify, setModify}) => {
     const navigate = useNavigate();
@@ -33,43 +34,19 @@ const AddProduct = ({setWarning, product, modify, setModify}) => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try {
-            let imagePrincipalCloud;
-            const urlPost = '/product/add-new';
-            const urlPut = product ? `/product/${product.id}` : null;
-            if(imagePrincipalFile){
-                const formData = new FormData();
-                formData.append('file', imagePrincipalFile);
-                formData.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET);
-                const responseCloud = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`,{
-                    method: 'POST',
-                    body: formData
-                });
-                if(responseCloud.ok){
-                    const responseCloudJSON = await responseCloud.json();
-                    imagePrincipalCloud = responseCloudJSON.public_id;
-                }else{
-                    throw new Error('Cloudinary: An error has occured: '+responseCloud.status);
-                }
+            const imagePrincipalCloud = imagePrincipalFile ? await postImage(imagePrincipalFile) : null;
+            console.log(imagePrincipalCloud)
+            if(modify){
+                const urlPut = `/product/${product.id}`;
+                const json = await fetchPUT(urlPut, {"name": productName, "price": price, "description": description, "category": category, "image_url": imagePrincipalCloud});
+                setModify(false);
+                dispatch(updateProduct(json.product));
             }
-            const responseDB = await fetch(modify == true ? urlPut : urlPost, {
-                method: modify == true ? 'PUT' : 'POST',
-                headers:{
-                    'Content-type' : 'application/json'
-                },
-                body: JSON.stringify({"name": productName, "price": price, "description": description, "category": category, "image_url": imagePrincipalCloud})
-            });
-            if(responseDB.ok){
-                const responseDBJSON = await responseDB.json();
-                if(!modify){
-                    dispatch(addProduct(responseDBJSON.product))
-                    navigate('/product/'+responseDBJSON.product.id);
-                }
-                else{
-                    setModify(false);
-                    dispatch(updateProduct(responseDBJSON.product));
-                }
-            }else{
-                throw new Error('An error has occured: '+responseDB.status);
+            else{
+                const urlPost = '/product/add-new';
+                const json = await fetchPOST(urlPost, {"name": productName, "price": price, "description": description, "category": category, "image_url": imagePrincipalCloud});
+                dispatch(addProduct(json.product));
+                navigate('/product/'+json.product.id);
             }
         }catch(e){
             console.error(e);

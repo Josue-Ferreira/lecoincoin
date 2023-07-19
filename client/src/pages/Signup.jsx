@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import { fetchPOST, postImage } from '../helpers/fetchBack';
 
 const Title = styled.h2`
     text-align: center;
@@ -27,32 +28,12 @@ const Signup = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        let avatar_cloud;
-        if(avatarFile){
-            const formData = new FormData();
-            formData.append('file', avatarFile);
-            formData.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET);
-            const responseCloud = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`,{
-                method: 'POST',
-                body: formData
-            });
-            if(responseCloud.ok){
-                const responseCloudJSON = await responseCloud.json();
-                avatar_cloud = responseCloudJSON.public_id;
-            }
-        }
-        const responseDB = await fetch('/user/signup',{
-            method: "POST",
-            headers:{
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({"firstname": firstName, "lastname": lastName, "email": email, "password": password, "avatar_cloud": avatar_cloud, "signup": "true"})
-        });
-        if(responseDB.status == 200){
+        try {
+            const avatar_cloud = avatarFile ? await postImage(avatarFile) : null;
+            const json = await fetchPOST('/user/signup', {"firstname": firstName, "lastname": lastName, "email": email, "password": password, "avatar_cloud": avatar_cloud, "signup": "true"});
             setWarning(false);
             navigate('/sign-up/success');
-        }
-        else{
+        } catch (e) {
             setWarning(true);
         }
     }

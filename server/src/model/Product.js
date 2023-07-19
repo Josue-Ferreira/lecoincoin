@@ -76,6 +76,11 @@ class Product{
         return results;
     }
 
+    async updateImagePrincipal(url, productId){
+        const [results] = await this.db.query("UPDATE image_product SET url=? WHERE product_id=? AND is_principal='1'",[url, productId]);
+        return results;
+    }
+
     async deleteImage(imageId){
         await this.db.query("DELETE FROM image_product WHERE id=? AND is_principal='0'",[imageId]);
     }

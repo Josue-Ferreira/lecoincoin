@@ -3,16 +3,15 @@ import NavigationBar from '../components/NavigationBar';
 import ProductsList from '../components/ProductsList';
 import { useDispatch } from 'react-redux';
 import {refreshAllList, setAuthor} from '../features/product/productSlice';
-
+import { fetchGet } from '../helpers/fetchBack';
 
 const Home = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
         const getProductsAPI = async() => {
-            const productsRawData = await fetch('/product/all');
-            const productsJson = await productsRawData.json();
-            dispatch(refreshAllList(productsJson.products));
+            const json = await fetchGet('/product/all');
+            dispatch(refreshAllList(json.products));
             dispatch(setAuthor(false));
         }
 

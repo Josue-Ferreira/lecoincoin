@@ -18,6 +18,7 @@ import { fill } from "@cloudinary/url-gen/actions/resize";
 import {BsThreeDots} from 'react-icons/bs';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeProduct } from '../features/product/productSlice';
+import { fetchDelete } from '../helpers/fetchBack';
 
 const ImageContainer = styled.div`
     display: flex;
@@ -32,9 +33,7 @@ const ProductCard = ({product, setModify}) => {
     const dispatch = useDispatch();
 
     const handleDelete = async() => {
-        const responseDB = await fetch(`/product/${product.id}`,{
-            method: 'DELETE'
-        });
+        const responseDB = await fetchDelete(`/product/${product.id}`);
         if(responseDB.status == 200){
             dispatch(removeProduct(product));
         }

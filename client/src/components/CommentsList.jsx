@@ -5,6 +5,7 @@ import CommentCard from './CommentCard';
 import SubmitComment from './SubmitComment';
 import { useSelector, useDispatch } from 'react-redux';
 import {refreshAllList} from '../features/comment/commentSlice';
+import { fetchGet } from '../helpers/fetchBack';
 
 const CommentContainer = styled.div`
     display: flex;
@@ -25,14 +26,11 @@ const CommentsList = ({productID}) => {
 
     useEffect(() => {
         const getComments = async() => {
-            const responseDB = await fetch(`/product/${productID}/comment/all`);
-            if(responseDB.status == 200){
-                const responseDBJSON = await responseDB.json();
-                responseDBJSON.comments.forEach((comment,i) => {
-                    responseDBJSON.comments[i].avatar_cloud = cld.image(comment.avatar_cloud)
-                });
-                dispatch(refreshAllList(responseDBJSON.comments));
-            }
+            const json = await fetchGet(`/product/${productID}/comment/all`);
+            json.comments.forEach((comment,i) => {
+                json.comments[i].avatar_cloud = cld.image(comment.avatar_cloud)
+            });
+            dispatch(refreshAllList(json.comments));
         }
 
         getComments();

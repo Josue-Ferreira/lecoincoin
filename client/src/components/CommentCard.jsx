@@ -12,6 +12,7 @@ import {BsThreeDots} from 'react-icons/bs'
 import SubmitComment from './SubmitComment';
 import { useDispatch } from 'react-redux';
 import { removeComment } from '../features/comment/commentSlice';
+import { fetchDelete } from '../helpers/fetchBack';
 
 const Comment = styled.div`
     display: flex;
@@ -46,9 +47,7 @@ const CommentCard = ({comment, productID}) => {
     const [isOpenCommentActions, setIsOpenCommentActions] = useState(false);
     
     const handleDelete = async() => {
-        const responseDB = await fetch(`/product/${productID}/comment/${comment.id}`,{
-            method: 'DELETE'
-        });
+        const responseDB = await fetchDelete(`/product/${productID}/comment/${comment.id}`);
         if(responseDB.status == 200){
             dispatch(removeComment(comment));
         }
