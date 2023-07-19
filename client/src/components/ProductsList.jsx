@@ -7,14 +7,14 @@ import {
 } from 'reactstrap'
 import ModifyProductCard from './ModifyProductCard';
 
-const ProductsList = ({products, productPerRow, isAuthor}) => {
+const ProductsList = ({products, setMyProducts, productPerRow, isAuthor}) => {
     return (
         <Container>
             <Row xs={productPerRow}>
                 {
                     products && products.map(product => (
                         <Col key={product.id}>
-                            {isAuthor ? (<ModifyProductCard product={product} />) : (<ProductCard product={product} />)}
+                            {isAuthor ? (<ModifyProductCard product={product} setMyProducts={setMyProducts} />) : (<ProductCard product={product} />)}
                         </Col>
                     ))
                 }

@@ -9,21 +9,16 @@ import {
     Row,
     Col
 } from 'reactstrap';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-const Title = styled.h3`
-    margin: 20px 0;
-`;
-
-const AddProduct = () => {
+const AddProduct = ({setWarning, product, modify, setModify, setMyProducts}) => {
     const navigate = useNavigate();
-    const [productName, setProductName] = useState();
-    const [category, setCategory] = useState();
-    const [description, setDescription] = useState();
-    const [price, setPrice] = useState();
+    const [productName, setProductName] = useState(product ? product.name : '');
+    const [category, setCategory] = useState(product ? product.category : '');
+    const [description, setDescription] = useState(product ? product.description : '');
+    const [price, setPrice] = useState(product ? product.price : '');
     const [imagePrincipalFile, setImagePrincipalFile] = useState();
-    const [warning, setWarning] = useState(false);
     const descriptionRef = useRef(null);
 
     useEffect(() => {
@@ -37,22 +32,26 @@ const AddProduct = () => {
     const handleSubmit = async(e) => {
         e.preventDefault();
         try {
-            const formData = new FormData();
-            formData.append('file', imagePrincipalFile);
-            formData.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET);
             let imagePrincipalCloud;
-            const responseCloud = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`,{
-                method: 'POST',
-                body: formData
-            });
-            if(responseCloud.ok){
-                const responseCloudJSON = await responseCloud.json();
-                imagePrincipalCloud = responseCloudJSON.public_id;
-            }else{
-                throw new Error('Cloudinary: An error has occured: '+responseCloud.status);
+            const urlPost = '/product/add-new';
+            const urlPut = product ? `/product/${product.id}` : null;
+            if(imagePrincipalFile){
+                const formData = new FormData();
+                formData.append('file', imagePrincipalFile);
+                formData.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET);
+                const responseCloud = await fetch(`https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUDINARY_NAME}/image/upload`,{
+                    method: 'POST',
+                    body: formData
+                });
+                if(responseCloud.ok){
+                    const responseCloudJSON = await responseCloud.json();
+                    imagePrincipalCloud = responseCloudJSON.public_id;
+                }else{
+                    throw new Error('Cloudinary: An error has occured: '+responseCloud.status);
+                }
             }
-            const responseDB = await fetch('/product/add-new', {
-                method: 'POST',
+            const responseDB = await fetch(modify == true ? urlPut : urlPost, {
+                method: modify == true ? 'PUT' : 'POST',
                 headers:{
                     'Content-type' : 'application/json'
                 },
@@ -60,9 +59,14 @@ const AddProduct = () => {
             });
             if(responseDB.ok){
                 const responseDBJSON = await responseDB.json();
-                navigate('/product/'+responseDBJSON.productID)
+                if(!modify)
+                    navigate('/product/'+responseDBJSON.productID);
+                else{
+                    setModify(false);
+                    setMyProducts(previous => previous.map(element => responseDBJSON.product.id == element.id ? responseDBJSON.product : element));
+                }
             }else{
-                throw new Error('An error has occured: '+responseCloud.status);
+                throw new Error('An error has occured: '+responseDB.status);
             }
         }catch(e){
             console.error(e);
@@ -74,19 +78,11 @@ const AddProduct = () => {
         <>
             <Form
                 style={{
-                    width: '70vw',
-                    margin: '20px auto'}}
+                    margin: '20px auto'
+                }}
 
                 onSubmit={handleSubmit}
             >
-                <Title>Add new product to sell</Title>
-                {
-                    warning && (
-                        <Alert color="danger">
-                            Add new product failed
-                        </Alert>
-                    )
-                }
                 <Row xs="4">
                     <Col>
                         <FormGroup>
@@ -146,25 +142,25 @@ const AddProduct = () => {
                                 name="imagePrincipal"
                                 type="file"
                                 onChange={e => setImagePrincipalFile(e.target.files[0])}
-                                required
+                                required={product ? false : true}
                             />
                         </FormGroup>
                     </Col>
                 </Row>
                 <FormGroup>
                     <Label for="description">
-                    Description
+                        Description
                     </Label>
                     <Input
-                    id="description"
-                    name="description"
-                    placeholder="ex : white urban bike"
-                    type="textarea"
-                    value={description}
-                    innerRef={descriptionRef}
-                    onChange={e => setDescription(e.target.value)}
-                    style={{resize: 'none'}}
-                    required
+                        id="description"
+                        name="description"
+                        placeholder="ex : white urban bike"
+                        type="textarea"
+                        value={description}
+                        innerRef={descriptionRef}
+                        onChange={e => setDescription(e.target.value)}
+                        style={{resize: 'none'}}
+                        required
                     />
                 </FormGroup>
                 <Button type='submit' color='primary' >

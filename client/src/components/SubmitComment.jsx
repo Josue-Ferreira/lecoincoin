@@ -27,7 +27,7 @@ const SubmitComment = ({productID, comments, setComments, method, modify, setMod
     const handleSubmitComment = async(e) => {
         e.preventDefault();
         const urlPost = `/product/${productID}/comment/add-new`;
-        const urlPut = `/product/${productID}/comment/${comment.id}`;
+        const urlPut = comment ? `/product/${productID}/comment/${comment.id}` : null;
         if(newComment){
             const responseDB = await fetch(method === 'PUT' ? urlPut : urlPost,{
                 method: method,
