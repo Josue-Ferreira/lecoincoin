@@ -16,8 +16,8 @@ export const productSlice = createSlice({
         updateProduct: (state, action) => { // action.payload = réponse de la db avec le produit mis à jour
             state.content = state.content.map(element => action.payload.id == element.id ? action.payload : element);
         },
-        removeProduct: (state, action) => {  // action.payload = product.id
-            state.content = state.content.filter(element => action.payload != element.id);
+        removeProduct: (state, action) => {  // action.payload = product
+            state.content = state.content.filter(element => action.payload.id != element.id);
         },
         setAuthor: (state, action) => {
             state.isAuthor = action.payload;

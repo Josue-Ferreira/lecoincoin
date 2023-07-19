@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import {Cloudinary} from "@cloudinary/url-gen";
 import styled from 'styled-components';
 import CommentCard from './CommentCard';
 import SubmitComment from './SubmitComment';
+import { useSelector, useDispatch } from 'react-redux';
+import {refreshAllList} from '../features/comment/commentSlice';
 
 const CommentContainer = styled.div`
     display: flex;
@@ -13,8 +14,10 @@ const CommentContainer = styled.div`
 `;
 
 const CommentsList = ({productID}) => {
-    const [comments, setComments] = useState();
+    // const [comments, setComments] = useState();
     const user = useSelector(state => state.user.profile);
+    const comments = useSelector(state => state.comments.content);
+    const dispatch = useDispatch();
     const cld = new Cloudinary({
         cloud: {
           cloudName: process.env.REACT_APP_CLOUDINARY_NAME
@@ -26,11 +29,11 @@ const CommentsList = ({productID}) => {
             const responseDB = await fetch(`/product/${productID}/comment/all`);
             if(responseDB.status == 200){
                 const responseDBJSON = await responseDB.json();
-                console.log(responseDBJSON.comments)
                 responseDBJSON.comments.forEach((comment,i) => {
                     responseDBJSON.comments[i].avatar_cloud = cld.image(comment.avatar_cloud)
                 });
-                setComments(responseDBJSON.comments);
+                // setComments(responseDBJSON.comments);
+                dispatch(refreshAllList(responseDBJSON.comments));
             }
         }
 
@@ -40,9 +43,10 @@ const CommentsList = ({productID}) => {
     return (
         <CommentContainer>
             {comments && comments.map(comment => (
-                <CommentCard key={comment.id} comment={comment} comments={comments} setComments={setComments} productID={productID} />
+                // <CommentCard key={comment.id} comment={comment} comments={comments} setComments={setComments} productID={productID} />
+                <CommentCard key={comment.id} comment={comment} productID={productID} />
             ))}
-            {user && <SubmitComment productID={productID} comments={comments} setComments={setComments} method={'POST'}/>}
+            {user && <SubmitComment productID={productID} />}
         </CommentContainer>
     );
 };

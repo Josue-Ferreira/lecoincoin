@@ -6,17 +6,17 @@ export const commentSlice = createSlice({
         content: []
     },
     reducers: {
-        refreshAllList: (state, actions) => {
-
+        refreshAllList: (state, action) => { // action.payload = array of comments
+            state.content = action.payload;
         },
-        addComment: (state, actions) => {
-
+        addComment: (state, action) => { // action.payload = comment
+            state.content.push(action.payload);
         },
-        updateComment: (state, actions) => {
-
+        updateComment: (state, action) => { // action.payload = comment
+            state.content = state.content.map(element => action.payload.id == element.id ? action.payload : element);
         },
-        removeComment: (state, actions) => {
-
+        removeComment: (state, action) => { // action.payload = comment
+            state.content = state.content.filter(element => action.payload.id != element.id);
         }
     }
 });

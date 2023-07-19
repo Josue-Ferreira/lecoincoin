@@ -6,8 +6,11 @@ import {
     Form,
     Input 
 } from 'reactstrap';
+import { useDispatch } from 'react-redux';
+import { addComment, updateComment } from '../features/comment/commentSlice';
 
-const SubmitComment = ({productID, comments, setComments, method, modify, setModify, comment}) => {
+// const SubmitComment = ({productID, comments, setComments, method, modify, setModify, comment}) => {
+const SubmitComment = ({productID, modify, setModify, comment}) => {
     const [newComment, setNewComment] = useState(comment ? comment.comment : '');
     const cld = new Cloudinary({
         cloud: {
@@ -15,6 +18,7 @@ const SubmitComment = ({productID, comments, setComments, method, modify, setMod
         }
       }); 
     const commentRef = useRef(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (commentRef.current) {
@@ -29,8 +33,8 @@ const SubmitComment = ({productID, comments, setComments, method, modify, setMod
         const urlPost = `/product/${productID}/comment/add-new`;
         const urlPut = comment ? `/product/${productID}/comment/${comment.id}` : null;
         if(newComment){
-            const responseDB = await fetch(method === 'PUT' ? urlPut : urlPost,{
-                method: method,
+            const responseDB = await fetch(modify ? urlPut : urlPost,{
+                method: modify ? 'PUT' : 'POST',
                 headers:{
                     'Content-type': 'application/json'
                 },
@@ -39,12 +43,15 @@ const SubmitComment = ({productID, comments, setComments, method, modify, setMod
             if(responseDB.status == 200){
                 const responseDBJSON = await responseDB.json();
                 responseDBJSON.comment.avatar_cloud = cld.image(responseDBJSON.comment.avatar_cloud);
-                if(method === 'PUT'){
-                    setComments(previous => previous.map(element => responseDBJSON.comment.id == element.id ? responseDBJSON.comment : element));
+                if(modify){
+                    // setComments(previous => previous.map(element => responseDBJSON.comment.id == element.id ? responseDBJSON.comment : element));
+                    dispatch(updateComment(responseDBJSON.comment));
                     setModify(false);
                 }
-                else  
-                    setComments([...comments, responseDBJSON.comment]);
+                else{
+                    dispatch(addComment(responseDBJSON.comment));
+                }
+                    // setComments([...comments, responseDBJSON.comment]);
                 setNewComment('');
             }
         }

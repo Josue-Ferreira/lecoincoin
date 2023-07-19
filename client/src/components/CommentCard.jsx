@@ -10,6 +10,8 @@ import {
 } from 'reactstrap';
 import {BsThreeDots} from 'react-icons/bs'
 import SubmitComment from './SubmitComment';
+import { useDispatch } from 'react-redux';
+import { removeComment } from '../features/comment/commentSlice';
 
 const Comment = styled.div`
     display: flex;
@@ -37,8 +39,10 @@ const Date = styled.div`
     font-size: 0.7rem;
 `;
 
-const CommentCard = ({comment, comments, setComments, productID}) => {
+// const CommentCard = ({comment, comments, setComments, productID}) => {
+const CommentCard = ({comment, productID}) => {
     const user = useSelector(state => state.user.profile);
+    const dispatch = useDispatch();
     const [modify, setModify] = useState(false);
     const [isOpenCommentActions, setIsOpenCommentActions] = useState(false);
     
@@ -47,7 +51,8 @@ const CommentCard = ({comment, comments, setComments, productID}) => {
             method: 'DELETE'
         });
         if(responseDB.status == 200){
-            setComments(previous => previous.filter(element => comment.id != element.id));
+            // setComments(previous => previous.filter(element => comment.id != element.id));
+            dispatch(removeComment(comment));
         }
     }
     
@@ -94,7 +99,8 @@ const CommentCard = ({comment, comments, setComments, productID}) => {
             </AuthorComment>
             {
                 modify 
-                ? (<SubmitComment productID={productID} comments={comments} setComments={setComments} method={'PUT'} modify={modify} setModify={setModify} comment={comment}/>)
+                // ? (<SubmitComment productID={productID} comments={comments} setComments={setComments} method={'PUT'} modify={modify} setModify={setModify} comment={comment}/>)
+                ? (<SubmitComment productID={productID} modify={modify} setModify={setModify} comment={comment}/>)
                 : (<p>{comment.comment}</p>)
             }
         </Comment>

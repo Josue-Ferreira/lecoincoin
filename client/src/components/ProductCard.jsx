@@ -37,7 +37,7 @@ const ProductCard = ({product, setModify}) => {
             method: 'DELETE'
         });
         if(responseDB.status == 200){
-            dispatch(removeProduct(product.id));
+            dispatch(removeProduct(product));
         }
     }
     
