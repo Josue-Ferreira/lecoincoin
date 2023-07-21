@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import NavigationBar from '../components/NavigationBar';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import {AdvancedImage} from "@cloudinary/react";
@@ -65,7 +64,6 @@ const Product = () => {
 
     return (
         <>
-            <NavigationBar />
             {product && (
                 <ProductContainer>
                     <Pictures>

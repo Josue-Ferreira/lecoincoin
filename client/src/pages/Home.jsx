@@ -4,6 +4,7 @@ import ProductsList from '../components/ProductsList';
 import { useDispatch } from 'react-redux';
 import {refreshAllList, setAuthor} from '../features/product/productSlice';
 import { fetchGet } from '../helpers/fetchBack';
+import ChatBox from '../components/ChatBox';
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -20,7 +21,6 @@ const Home = () => {
 
     return (
         <>
-            <NavigationBar />
             <ProductsList productPerRow={4} />
         </>
     );

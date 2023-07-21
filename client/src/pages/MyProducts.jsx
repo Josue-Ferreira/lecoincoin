@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import NavigationBar from '../components/NavigationBar';
 import AddProduct from '../components/AddProduct';
 import ProductsList from '../components/ProductsList';
 import styled from 'styled-components';
@@ -39,7 +38,6 @@ const MyProducts = () => {
 
     return (
         <>
-           <NavigationBar />
            <PageContainer>
                 <Title>My Products</Title>
                 <ProductsList productPerRow={1} />

@@ -18,11 +18,41 @@ import EmailValidation from './pages/EmailValidation';
 import Product from './pages/Product';
 import ProtectedRoute from './pages/ProtectedRoute';
 import MyProducts from './pages/MyProducts';
+import Layout from './components/Layout';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Home />
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <Home />
+      },
+      {
+        path: '/profile',
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: '',
+            element: <Profile />
+          }
+        ]
+      },
+      {
+        path: '/product/:productID',
+        element: <Product />
+      },
+      {
+        path: '/my-products',
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: '',
+            element: <MyProducts />
+          }
+        ]
+      }
+    ]
   },
   {
     path: '/sign-in',
@@ -37,32 +67,8 @@ const router = createBrowserRouter([
     element: <SuccessSignup />
   },
   {
-    path: '/profile',
-    element: <ProtectedRoute />,
-    children: [
-      {
-        path: '',
-        element: <Profile />
-      }
-    ]
-  },
-  {
     path: '/signup-validation',
     element: <EmailValidation />
-  },
-  {
-    path: '/product/:productID',
-    element: <Product />
-  },
-  {
-    path: '/my-products',
-    element: <ProtectedRoute />,
-    children: [
-      {
-        path: '',
-        element: <MyProducts />
-      }
-    ]
   }
 ]);
 
