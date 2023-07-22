@@ -77,6 +77,7 @@ const Signin = () => {
                         type="password"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleSignIn()}
                         className={validCredentials ? '' : 'is-invalid'}
                     />
                     <FormFeedback invalid='true' >

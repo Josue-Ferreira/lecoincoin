@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logOut } from '../../features/user/userSlice';
-import { Link, useNavigate } from 'react-router-dom';
+// import { logOut } from '../../features/user/userSlice';
+import { Link } from 'react-router-dom';
 import {
   Collapse,
   Navbar,
@@ -14,44 +14,45 @@ import {
   Popover,
   PopoverBody
 } from 'reactstrap';
-import {BsPersonCircle} from 'react-icons/bs'
+// import {BsPersonCircle} from 'react-icons/bs'
 import styled from 'styled-components';
-import {Cloudinary} from "@cloudinary/url-gen";
-import {AdvancedImage} from '@cloudinary/react';
+import UserMenu from './UserMenu';
+// import {Cloudinary} from "@cloudinary/url-gen";
+// import {AdvancedImage} from '@cloudinary/react';
 
-const UserMenu = styled.div`
-  margin: 5px 0;  
-  padding: 10px;
-  cursor: pointer;
-  border-radius: 5px;
-  &:hover{
-    background-color: lightblue;
-  }
-`;
+// const UserMenu = styled.div`
+//   margin: 5px 0;  
+//   padding: 10px;
+//   cursor: pointer;
+//   border-radius: 5px;
+//   &:hover{
+//     background-color: lightblue;
+//   }
+// `;
 
 function NavigationBar() {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const user = useSelector(state => state.user.profile);
-  const [openUserMenu, setOpenUserMenu] = useState(false);
+  // const [openUserMenu, setOpenUserMenu] = useState(false);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const handleLogOut = () => {
-    dispatch(logOut());
-    navigate('/');
-  }
+  // const handleLogOut = () => {
+  //   dispatch(logOut());
+  //   navigate('/');
+  // }
 
-  const [avatar, setAvatar] = useState();
+  // const [avatar, setAvatar] = useState();
 
-  useEffect(() => {
-    if(user && user.avatar_cloud){
-      const cld = new Cloudinary({cloud: {cloudName: process.env.REACT_APP_CLOUDINARY_NAME}});
-      setAvatar(cld.image(user.avatar_cloud));
-    }
-  },[user]);
+  // useEffect(() => {
+  //   if(user && user.avatar_cloud){
+  //     const cld = new Cloudinary({cloud: {cloudName: process.env.REACT_APP_CLOUDINARY_NAME}});
+  //     setAvatar(cld.image(user.avatar_cloud));
+  //   }
+  // },[user]);
 
   return (
     <Navbar expand={'md'} >
@@ -72,7 +73,8 @@ function NavigationBar() {
                 )}
             </NavItem>
             </Nav>
-            {
+            <UserMenu />
+            {/* {
             user ? (
                 <>
                     {avatar && <AdvancedImage style={{maxHeight: '50px', borderRadius: '50%', marginRight: '10px'}} cldImg={avatar} />}
@@ -111,7 +113,7 @@ function NavigationBar() {
                     <BsPersonCircle style={{marginRight: '5px'}} />Sign In
                 </Button>
             )
-            }
+            } */}
         </Collapse>
     </Navbar>
   );

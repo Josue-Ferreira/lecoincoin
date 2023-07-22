@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import {Cloudinary} from "@cloudinary/url-gen";
 import styled from 'styled-components';
 import CommentCard from './CommentCard';
 import SubmitComment from './SubmitComment';
@@ -18,18 +17,10 @@ const CommentsList = ({productID}) => {
     const user = useSelector(state => state.user.profile);
     const comments = useSelector(state => state.comments.content);
     const dispatch = useDispatch();
-    const cld = new Cloudinary({
-        cloud: {
-          cloudName: process.env.REACT_APP_CLOUDINARY_NAME
-        }
-      }); 
 
     useEffect(() => {
         const getComments = async() => {
             const json = await fetchGet(`/product/${productID}/comment/all`);
-            json.comments.forEach((comment,i) => {
-                json.comments[i].avatar_cloud = cld.image(comment.avatar_cloud)
-            });
             dispatch(refreshAllList(json.comments));
         }
 
