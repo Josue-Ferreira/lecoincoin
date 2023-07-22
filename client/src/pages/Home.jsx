@@ -1,10 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import NavigationBar from '../components/NavigationBar';
-import ProductsList from '../components/ProductsList';
+import ProductsList from '../components/Product/ProductsList';
 import { useDispatch } from 'react-redux';
 import {refreshAllList, setAuthor} from '../features/product/productSlice';
 import { fetchGet } from '../helpers/fetchBack';
-import ChatBox from '../components/ChatBox';
 
 const Home = () => {
     const dispatch = useDispatch();

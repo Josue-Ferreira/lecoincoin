@@ -16,9 +16,9 @@ import SuccessSignup from './pages/SuccessSignup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EmailValidation from './pages/EmailValidation';
 import Product from './pages/Product';
-import ProtectedRoute from './pages/ProtectedRoute';
+import ProtectedRoute from './components/features/ProtectedRoute';
 import MyProducts from './pages/MyProducts';
-import Layout from './components/Layout';
+import Layout from './components/features/Layout';
 
 const router = createBrowserRouter([
   {
@@ -51,24 +51,24 @@ const router = createBrowserRouter([
             element: <MyProducts />
           }
         ]
+      },
+      {
+        path: '/sign-in',
+        element: <Signin />
+      },
+      {
+        path: '/sign-up',
+        element: <Signup />
+      },
+      {
+        path: '/sign-up/success',
+        element: <SuccessSignup />
+      },
+      {
+        path: '/signup-validation',
+        element: <EmailValidation />
       }
     ]
-  },
-  {
-    path: '/sign-in',
-    element: <Signin />
-  },
-  {
-    path: '/sign-up',
-    element: <Signup />
-  },
-  {
-    path: '/sign-up/success',
-    element: <SuccessSignup />
-  },
-  {
-    path: '/signup-validation',
-    element: <EmailValidation />
   }
 ]);
 

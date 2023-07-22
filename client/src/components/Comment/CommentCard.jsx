@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import {AdvancedImage} from "@cloudinary/react";
 import SubmitComment from './SubmitComment';
 import { useDispatch } from 'react-redux';
-import { removeComment } from '../features/comment/commentSlice';
-import { fetchDelete } from '../helpers/fetchBack';
-import MenuModifyDelete from './MenuModifyDelete';
+import { removeComment } from '../../features/comment/commentSlice';
+import { fetchDelete } from '../../helpers/fetchBack';
+import MenuModifyDelete from '../features/MenuModifyDelete';
 
 const Comment = styled.div`
     display: flex;

@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import AddProduct from '../components/AddProduct';
-import ProductsList from '../components/ProductsList';
+import AddProduct from '../components/Product/AddProduct';
+import ProductsList from '../components/Product/ProductsList';
 import styled from 'styled-components';
 import {
     Alert

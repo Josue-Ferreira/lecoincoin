@@ -1,7 +1,7 @@
 import React from 'react';
-import NavigationBar from './NavigationBar';
+import NavigationBar from '../Navbar/NavigationBar';
 import { Outlet } from 'react-router-dom';
-import ChatBox from './ChatBox';
+import ChatBox from '../Chat/ChatBox';
 
 const Layout = () => {
     return (

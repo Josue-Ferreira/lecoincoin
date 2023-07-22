@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import {AdvancedImage} from "@cloudinary/react";
 import {Cloudinary} from "@cloudinary/url-gen";
 import {Button} from 'reactstrap';
-import CommentsList from '../components/CommentsList';
+import CommentsList from '../components/Comment/CommentsList';
 import { fetchGet } from '../helpers/fetchBack';
 
 const ProductContainer = styled.div`

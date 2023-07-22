@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import NavigationBar from '../components/NavigationBar';
 import styled from 'styled-components';
 import {
     FormGroup,
@@ -49,7 +48,6 @@ const Signin = () => {
 
     return (
         <>
-            <NavigationBar />
             <Container>
                 <FormGroup>
                     <Label for="exampleEmail">

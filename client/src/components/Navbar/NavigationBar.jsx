@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { logOut } from '../features/user/userSlice';
+import { logOut } from '../../features/user/userSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Collapse,

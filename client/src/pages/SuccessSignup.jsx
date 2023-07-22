@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import NavigationBar from '../components/NavigationBar';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +22,6 @@ const SuccessSignup = () => {
 
     return (
         <>
-            <NavigationBar />
             <Container>
                 <h2>
                     Congratulations !

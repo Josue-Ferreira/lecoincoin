@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import CommentCard from './CommentCard';
 import SubmitComment from './SubmitComment';
 import { useSelector, useDispatch } from 'react-redux';
-import {refreshAllList} from '../features/comment/commentSlice';
-import { fetchGet } from '../helpers/fetchBack';
+import {refreshAllList} from '../../features/comment/commentSlice';
+import { fetchGet } from '../../helpers/fetchBack';
 
 const CommentContainer = styled.div`
     display: flex;

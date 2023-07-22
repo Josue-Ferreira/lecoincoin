@@ -7,8 +7,8 @@ import {
     Input 
 } from 'reactstrap';
 import { useDispatch } from 'react-redux';
-import { addComment, updateComment } from '../features/comment/commentSlice';
-import { fetchPOST, fetchPUT } from '../helpers/fetchBack';
+import { addComment, updateComment } from '../../features/comment/commentSlice';
+import { fetchPOST, fetchPUT } from '../../helpers/fetchBack';
 
 const SubmitComment = ({productID, modify, setModify, comment}) => {
     const [newComment, setNewComment] = useState(comment ? comment.comment : '');
