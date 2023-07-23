@@ -72,7 +72,7 @@ const createCookieJWT = async(req, res, next) => {
     const {email} = req.body; 
 
     try {
-        const token = jwt.sign({email: email}, process.env.JWT_SECRET, {expiresIn: '1m'});
+        const token = jwt.sign({email: email}, process.env.JWT_SECRET, {expiresIn: '1h'});
         req.token = token;
         next();
     } catch (error) {

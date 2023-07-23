@@ -56,10 +56,10 @@ class Product{
             let titleSplited = product.title.slice(0, 45).split(" ");
             titleSplited.pop();
             const titleShort = titleSplited.join(' ');
-            const product_id_created = await this.create(titleShort, product.price, product.description, product.category, product.id);
+            const product_created = await this.create(titleShort, product.price, product.description, product.category, product.id);
             cloudinary.v2.uploader
                     .upload(product.image, {folder: 'lecoincoin'}, (error, result) => {
-                        this.createImage(product.category, result.public_id, 1, product_id_created);
+                        this.createImage(product.category, result.public_id, 1, product_created.id);
                     });
         });
     }

@@ -34,13 +34,11 @@ const SubmitComment = ({productID, modify, setModify, comment}) => {
             if(modify){
                 const urlPut = `/product/${productID}/comment/${comment.id}`;
                 const json = await fetchPUT(urlPut, {"comment": newComment});
-                json.comment.avatar_cloud = cld.image(json.comment.avatar_cloud);
                 dispatch(updateComment(json.comment));
                 setModify(false);
             }else{
                 const urlPost = `/product/${productID}/comment/add-new`;
                 const json = await fetchPOST(urlPost, {"comment": newComment});
-                json.comment.avatar_cloud = cld.image(json.comment.avatar_cloud);
                 dispatch(addComment(json.comment));
             }
             setNewComment('');
