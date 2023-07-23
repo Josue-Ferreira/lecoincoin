@@ -47,7 +47,9 @@ const createProduct = async(req, res) => {
     try{
         const userCredentials = await user.getUserCredentials(email);
         const newProduct = await product.create(name, price, description, category, userCredentials.id);
-        await product.createImage(name, image_url, 1, newProduct.id);
+        console.log('newProduct:', newProduct)
+        const productID = newProduct.id;
+        await product.createImage(name, image_url, 1, productID);
         res.json({'product': newProduct});
     }catch(e){
         console.error(e);
