@@ -33,6 +33,7 @@ const Signup = () => {
             setWarning(false);
             navigate('/sign-up/success');
         } catch (e) {
+            console.log(e)
             setWarning(true);
         }
     }
