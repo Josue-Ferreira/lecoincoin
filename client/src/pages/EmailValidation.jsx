@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import NavigationBar from '../components/NavigationBar';
 import styled from 'styled-components';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -35,7 +34,6 @@ const EmailValidation = () => {
 
     return (
         <>
-            <NavigationBar />
             <Container>
                 <h3>
                     {messageContent}

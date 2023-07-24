@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import NavigationBar from '../components/NavigationBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { logIn } from '../features/user/userSlice';
 import styled from 'styled-components';
@@ -70,7 +69,6 @@ const Profile = () => {
 
     return (
         <>
-            <NavigationBar />
             <Container>
                 <Title>MY PROFILE</Title>
                 <Form onSubmit={handleSubmit} >

@@ -15,6 +15,7 @@ router.post('/signin', authHandlers.emailAccountExist, authHandlers.checkCredent
 router.use(cookieParser());
 router.use(authHandlers.verifyJWT);
 
+router.get('/', (req, res) => res.sendStatus(200)); // if jwt passes authHandlers.verifyJWT that means jwt token user is valid if not status 401
 router.put('/', userHandlers.updateProfile);
 router.delete('/', userHandlers.deleteProfile);
 

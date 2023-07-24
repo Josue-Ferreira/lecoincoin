@@ -10,8 +10,8 @@ import {
 } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { addProduct, updateProduct } from '../features/product/productSlice';
-import { fetchPOST, fetchPUT, postImage } from '../helpers/fetchBack';
+import { addProduct, updateProduct } from '../../features/product/productSlice';
+import { fetchPOST, fetchPUT, postImage } from '../../helpers/fetchBack';
 
 const AddProduct = ({setWarning, product, modify, setModify}) => {
     const navigate = useNavigate();

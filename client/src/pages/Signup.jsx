@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import NavigationBar from '../components/NavigationBar';
 import {
     Form,
     FormGroup,
@@ -34,13 +33,13 @@ const Signup = () => {
             setWarning(false);
             navigate('/sign-up/success');
         } catch (e) {
+            console.log(e)
             setWarning(true);
         }
     }
 
     return (
         <>
-            <NavigationBar />
             <Form
                 style={{
                     width: '50vw',

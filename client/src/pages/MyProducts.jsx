@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import NavigationBar from '../components/NavigationBar';
-import AddProduct from '../components/AddProduct';
-import ProductsList from '../components/ProductsList';
+import AddProduct from '../components/Product/AddProduct';
+import ProductsList from '../components/Product/ProductsList';
 import styled from 'styled-components';
 import {
     Alert
@@ -39,7 +38,6 @@ const MyProducts = () => {
 
     return (
         <>
-           <NavigationBar />
            <PageContainer>
                 <Title>My Products</Title>
                 <ProductsList productPerRow={1} />

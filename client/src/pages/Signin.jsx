@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import NavigationBar from '../components/NavigationBar';
 import styled from 'styled-components';
 import {
     FormGroup,
@@ -49,7 +48,6 @@ const Signin = () => {
 
     return (
         <>
-            <NavigationBar />
             <Container>
                 <FormGroup>
                     <Label for="exampleEmail">
@@ -79,6 +77,7 @@ const Signin = () => {
                         type="password"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
+                        onKeyDown={e => e.key === 'Enter' && handleSignIn()}
                         className={validCredentials ? '' : 'is-invalid'}
                     />
                     <FormFeedback invalid='true' >

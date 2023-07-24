@@ -13,9 +13,9 @@ import {AdvancedImage} from "@cloudinary/react";
 import {CloudinaryImage} from "@cloudinary/url-gen";
 import { fill } from "@cloudinary/url-gen/actions/resize";
 import { useSelector, useDispatch } from 'react-redux';
-import { removeProduct } from '../features/product/productSlice';
-import { fetchDelete } from '../helpers/fetchBack';
-import MenuModifyDelete from './MenuModifyDelete';
+import { removeProduct } from '../../features/product/productSlice';
+import { fetchDelete } from '../../helpers/fetchBack';
+import MenuModifyDelete from '../features/MenuModifyDelete';
 
 const ImageContainer = styled.div`
     display: flex;

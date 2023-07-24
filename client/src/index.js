@@ -16,51 +16,57 @@ import SuccessSignup from './pages/SuccessSignup';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import EmailValidation from './pages/EmailValidation';
 import Product from './pages/Product';
-import ProtectedRoute from './pages/ProtectedRoute';
+import ProtectedRoute from './components/features/ProtectedRoute';
 import MyProducts from './pages/MyProducts';
+import Layout from './components/features/Layout';
 
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Home />
-  },
-  {
-    path: '/sign-in',
-    element: <Signin />
-  },
-  {
-    path: '/sign-up',
-    element: <Signup />
-  },
-  {
-    path: '/sign-up/success',
-    element: <SuccessSignup />
-  },
-  {
-    path: '/profile',
-    element: <ProtectedRoute />,
+    element: <Layout />,
     children: [
       {
-        path: '',
-        element: <Profile />
-      }
-    ]
-  },
-  {
-    path: '/signup-validation',
-    element: <EmailValidation />
-  },
-  {
-    path: '/product/:productID',
-    element: <Product />
-  },
-  {
-    path: '/my-products',
-    element: <ProtectedRoute />,
-    children: [
+        path: '/',
+        element: <Home />
+      },
       {
-        path: '',
-        element: <MyProducts />
+        path: '/profile',
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: '',
+            element: <Profile />
+          }
+        ]
+      },
+      {
+        path: '/product/:productID',
+        element: <Product />
+      },
+      {
+        path: '/my-products',
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: '',
+            element: <MyProducts />
+          }
+        ]
+      },
+      {
+        path: '/sign-in',
+        element: <Signin />
+      },
+      {
+        path: '/sign-up',
+        element: <Signup />
+      },
+      {
+        path: '/sign-up/success',
+        element: <SuccessSignup />
+      },
+      {
+        path: '/signup-validation',
+        element: <EmailValidation />
       }
     ]
   }

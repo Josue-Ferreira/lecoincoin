@@ -4,9 +4,10 @@ import { useSelector } from 'react-redux';
 import {AdvancedImage} from "@cloudinary/react";
 import SubmitComment from './SubmitComment';
 import { useDispatch } from 'react-redux';
-import { removeComment } from '../features/comment/commentSlice';
-import { fetchDelete } from '../helpers/fetchBack';
-import MenuModifyDelete from './MenuModifyDelete';
+import { removeComment } from '../../features/comment/commentSlice';
+import { fetchDelete } from '../../helpers/fetchBack';
+import MenuModifyDelete from '../features/MenuModifyDelete';
+import {Cloudinary} from "@cloudinary/url-gen";
 
 const Comment = styled.div`
     display: flex;
@@ -38,6 +39,12 @@ const CommentCard = ({comment, productID}) => {
     const user = useSelector(state => state.user.profile);
     const dispatch = useDispatch();
     const [modify, setModify] = useState(false);
+    const cld = new Cloudinary({
+        cloud: {
+          cloudName: process.env.REACT_APP_CLOUDINARY_NAME
+        }
+      }); 
+    const avatar = cld.image(comment.avatar_cloud);
     
     const handleDelete = async() => {
         const responseDB = await fetchDelete(`/product/${productID}/comment/${comment.id}`);
@@ -49,7 +56,7 @@ const CommentCard = ({comment, productID}) => {
     return (
         <Comment>
             <AuthorComment>
-                <AdvancedImage cldImg={comment.avatar_cloud} style={{maxHeight: '50px', borderRadius: '50%', marginRight: '10px'}} />
+                <AdvancedImage cldImg={avatar} style={{maxHeight: '50px', borderRadius: '50%', marginRight: '10px'}} />
                 <AuthorCommentInfos>
                     <div>{comment.firstname} {comment.lastname}</div>
                     <Date>at {comment.created_at} {comment.updated_at && `updated at ${comment.updated_at}`}</Date>

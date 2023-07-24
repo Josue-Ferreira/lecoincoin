@@ -21,7 +21,7 @@ const signup = async(req, res) => {
             html: `<p>Please, you must validate your account before log in first time using this link : <a href="${process.env.URL_FRONTEND}?token=${tokenSignupMailValidation}" target="_blank">Email account validation</a></p>`
         });
         console.log(info);
-        res.sendStatus(200);
+        res.json({'user': {firstname, lastname, email, avatar_cloud}});
     }catch(e){
         console.error(e);
         res.sendStatus(500);
