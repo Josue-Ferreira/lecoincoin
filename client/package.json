@@ -27,7 +27,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://lecoincoin.railway.internal:5000/",
+  "proxy": "https://lecoincoin.railway.internal:5000/",
   "eslintConfig": {
     "extends": [
       "react-app",
