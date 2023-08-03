@@ -14,7 +14,7 @@ const ProductsList = ({setMyProducts, productPerRow}) => {
 
     return (
         <Container>
-            <Row xs={productPerRow}>
+            <Row xs="1" sm={productPerRow/2} md={productPerRow}>
                 {
                     products && products.map(product => (
                         <Col key={product.id}>
