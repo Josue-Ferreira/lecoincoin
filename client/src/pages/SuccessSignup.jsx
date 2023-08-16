@@ -24,10 +24,10 @@ const SuccessSignup = () => {
         <>
             <Container>
                 <h2>
-                    Congratulations !
+                    Email verification
                 </h2>
                 <h3>
-                    Your account has been activated successfully. You will receive an email to validate your account. Please, click on the link received on email and next you will be able to log in.
+                    Your request has been received successfully. You will receive an email to validate your account. Please, click on the link received on email and next you will be able to log in.
                 </h3>  
             </Container>
         </>
